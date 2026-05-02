@@ -6,7 +6,8 @@ import fitbit
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 
-GROQ_API_KEY = "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"
+
+API_KEY = os.getenv("API_KEY")
 def fetch_patient_data(token):
     """
     get_fitbit_data(token) is a function that retrieves the
