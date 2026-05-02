@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Dashboard | Ek Noor Neki Da Hospital</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy:#0d1f5c; --blue:#1a3bb5; --accent:#4f8ef7; --sky:#e8f0fe;
+      --green:#22c55e; --red:#ef4444; --amber:#f59e0b; --purple:#8b5cf6;
+      --shadow:0 8px 32px rgba(13,31,92,.12); --card-r:18px;
+    }
+    body { font-family:'DM Sans',sans-serif; background:#f0f4ff; min-height:100vh; display:flex; }
+
+    /* SIDEBAR */
+    .sidebar { width:248px; background:linear-gradient(175deg,#0a1a4e 0%,#0d1f5c 60%,#162d8a 100%); min-height:100vh; position:fixed; left:0; top:0; display:flex; flex-direction:column; z-index:200; transition:transform .3s; }
+    .sb-logo { padding:28px 22px 18px; border-bottom:1px solid rgba(255,255,255,.08); }
+    .sb-logo img { width:40px; height:40px; border-radius:50%; border:2px solid rgba(255,255,255,.25); margin-bottom:10px; }
+    .sb-logo h2 { font-family:'Playfair Display',serif; font-size:13.5px; color:#fff; line-height:1.4; }
+    .sb-logo p  { font-size:10.5px; color:rgba(255,255,255,.4); margin-top:3px; }
+    .adm-badge  { margin:14px 14px 8px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1); border-radius:12px; padding:14px; }
+    .adm-avatar { width:44px; height:44px; background:linear-gradient(135deg,#8b5cf6,#4f8ef7); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:20px; margin-bottom:8px; }
+    .adm-name   { font-size:14px; font-weight:600; color:#fff; }
+    .adm-role   { font-size:11px; color:rgba(255,255,255,.45); margin-top:2px; }
+    .adm-pill   { display:inline-flex; align-items:center; gap:5px; background:rgba(139,92,246,.2); color:#c4b5fd; border-radius:20px; font-size:10px; padding:3px 8px; margin-top:8px; }
+    nav { flex:1; padding:6px 0; }
+    .nav-lbl  { font-size:10px; letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,.28); padding:14px 20px 5px; }
+    .nav-item { display:flex; align-items:center; gap:11px; padding:10px 20px; cursor:pointer; color:rgba(255,255,255,.58); font-size:13.5px; text-decoration:none; transition:all .2s; border-left:3px solid transparent; }
+    .nav-item:hover  { background:rgba(255,255,255,.07); color:#fff; }
+    .nav-item.active { background:rgba(255,255,255,.1); color:#fff; font-weight:600; border-left-color:#8b5cf6; }
+    .nav-item .ico   { font-size:17px; width:20px; text-align:center; }
+    .sb-foot  { padding:14px; border-top:1px solid rgba(255,255,255,.08); }
+    .logout-btn { width:100%; padding:9px; background:rgba(239,68,68,.15); color:#fca5a5; border:1px solid rgba(239,68,68,.25); border-radius:10px; font-size:13px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif; }
+    .logout-btn:hover { background:rgba(239,68,68,.28); color:#fff; }
+
+    /* MAIN */
+    .main { margin-left:248px; flex:1; min-width:0; }
+    .topbar { background:#fff; padding:15px 30px; display:flex; align-items:center; justify-content:space-between; box-shadow:0 2px 12px rgba(13,31,92,.07); position:sticky; top:0; z-index:100; }
+    .topbar-title { font-family:'Playfair Display',serif; font-size:19px; color:var(--navy); font-weight:700; }
+    .topbar-sub   { font-size:12px; color:#8892b0; margin-top:2px; }
+    .topbar-right { display:flex; align-items:center; gap:12px; }
+    .adm-chip     { background:linear-gradient(135deg,#8b5cf6,var(--blue)); color:#fff; font-size:11px; font-weight:700; padding:6px 14px; border-radius:20px; letter-spacing:1px; }
+    .date-chip    { background:var(--sky); color:var(--navy); font-size:12px; font-weight:600; padding:7px 14px; border-radius:10px; }
+    .mob-btn      { display:none; background:none; border:none; font-size:22px; cursor:pointer; color:var(--navy); }
+
+    .content { padding:24px 28px; }
+
+    /* STATS */
+    .stats-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(175px,1fr)); gap:15px; margin-bottom:24px; }
+    .stat-card  { background:#fff; border-radius:var(--card-r); padding:20px 22px; box-shadow:var(--shadow); position:relative; overflow:hidden; }
+    .stat-card::after { content:''; position:absolute; width:90px; height:90px; border-radius:50%; right:-22px; top:-22px; opacity:.08; }
+    .c-blue::after   { background:var(--blue); }   .c-green::after  { background:var(--green); }
+    .c-amber::after  { background:var(--amber); }  .c-purple::after { background:var(--purple); }
+    .c-red::after    { background:var(--red); }
+    .stat-ico  { font-size:24px; margin-bottom:10px; }
+    .stat-lbl  { font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:#8892b0; font-weight:600; }
+    .stat-val  { font-size:32px; font-weight:700; color:var(--navy); font-family:'Playfair Display',serif; margin:3px 0; }
+    .stat-sub  { font-size:12px; color:#8892b0; }
+
+    /* CARD */
+    .card { background:#fff; border-radius:var(--card-r); box-shadow:var(--shadow); overflow:hidden; margin-bottom:22px; }
+    .card-head { padding:17px 22px 13px; border-bottom:1px solid #f0f4ff; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; }
+    .card-head h3 { font-family:'Playfair Display',serif; font-size:17px; color:var(--navy); font-weight:700; }
+
+    /* FILTER */
+    .filter-row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+    .f-input, .f-select { padding:8px 13px; border:1.5px solid #dde4f5; border-radius:9px; font-family:'DM Sans',sans-serif; font-size:13px; color:#1a2340; background:#f8faff; outline:none; }
+    .f-input:focus,.f-select:focus { border-color:var(--accent); }
+    .f-input { width:175px; }
+    .btn-sm  { padding:8px 15px; border:none; border-radius:9px; font-family:'DM Sans',sans-serif; font-size:13px; font-weight:600; cursor:pointer; transition:all .2s; }
+    .btn-sky { background:var(--sky); color:var(--navy); } .btn-sky:hover { background:#d1e3fe; }
+
+    /* TABS */
+    .stabs { display:flex; gap:6px; padding:12px 20px; border-bottom:1px solid #f0f4ff; flex-wrap:wrap; }
+    .stab  { padding:6px 14px; border-radius:20px; font-size:12px; font-weight:600; cursor:pointer; border:2px solid transparent; background:#f0f4ff; color:#8892b0; transition:all .2s; }
+    .stab:hover { background:var(--sky); color:var(--navy); }
+    .stab.active-tab { background:var(--navy); color:#fff; }
+
+    /* TABLE */
+    .tbl-wrap { overflow-x:auto; }
+    table { width:100%; border-collapse:collapse; min-width:700px; }
+    thead th { padding:11px 14px; text-align:left; font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:#8892b0; font-weight:600; background:#f8faff; border-bottom:1px solid #eef0f8; white-space:nowrap; }
+    tbody td { padding:12px 14px; font-size:13px; color:#1a2340; border-bottom:1px solid #f0f4ff; vertical-align:middle; }
+    tbody tr:hover { background:#f8faff; }
+    tbody tr:last-child td { border-bottom:none; }
+
+    /* STATUS BADGE */
+    .sb { display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:700; padding:4px 12px; border-radius:20px; white-space:nowrap; }
+    .sb-pending  { background:#fef9c3; color:#92400e; }
+    .sb-accepted { background:#dcfce7; color:#166534; }
+    .sb-rejected { background:#fee2e2; color:#991b1b; }
+    .sdot { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
+    .sdot-p { background:var(--amber); }
+    .sdot-a { background:var(--green); animation:dp 1.5s infinite; }
+    .sdot-r { background:var(--red); }
+    @keyframes dp { 0%,100%{opacity:1}50%{opacity:.4} }
+
+    /* ACTION BUTTONS */
+    .acts { display:flex; gap:5px; flex-wrap:nowrap; }
+    .btn-acc { padding:5px 11px; background:#dcfce7; color:#166534; border:1.5px solid #86efac; border-radius:7px; font-size:11px; font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .2s; }
+    .btn-acc:hover { background:#bbf7d0; }
+    .btn-rej { padding:5px 11px; background:#fee2e2; color:#991b1b; border:1.5px solid #fca5a5; border-radius:7px; font-size:11px; font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .2s; }
+    .btn-rej:hover { background:#fecaca; }
+    .btn-rst { padding:5px 9px; background:#f0f4ff; color:#8892b0; border:1.5px solid #dde4f5; border-radius:7px; font-size:11px; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .2s; }
+    .btn-rst:hover { background:var(--sky); color:var(--navy); }
+    .btn-del { padding:5px 9px; background:rgba(239,68,68,.08); color:#ef4444; border:1px solid rgba(239,68,68,.2); border-radius:7px; font-size:11px; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .2s; }
+    .btn-del:hover { background:rgba(239,68,68,.18); }
+
+    /* BAR CHART */
+    .bar-chart { padding:14px 22px 18px; }
+    .bar-row   { display:flex; align-items:center; gap:10px; margin-bottom:11px; }
+    .bar-lbl   { font-size:12px; color:var(--navy); font-weight:500; min-width:90px; }
+    .bar-track { flex:1; background:#f0f4ff; border-radius:6px; height:9px; }
+    .bar-fill  { height:9px; border-radius:6px; transition:width .8s ease; }
+    .bar-cnt   { font-size:12px; color:#8892b0; min-width:26px; text-align:right; }
+
+    /* HIST ITEM */
+    .hist-item { display:flex; align-items:center; gap:12px; padding:12px 20px; border-bottom:1px solid #f0f4ff; }
+    .hist-item:last-child { border-bottom:none; }
+    .hist-av   { width:34px; height:34px; border-radius:50%; background:linear-gradient(135deg,var(--purple),var(--accent)); display:flex; align-items:center; justify-content:center; color:#fff; font-size:13px; font-weight:700; flex-shrink:0; }
+    .hist-cnt  { margin-left:auto; background:var(--sky); color:var(--navy); font-size:12px; font-weight:700; padding:4px 12px; border-radius:20px; }
+
+    /* REJECT MODAL */
+    .modal-ov { display:none; position:fixed; inset:0; background:rgba(13,31,92,.55); z-index:9000; align-items:center; justify-content:center; }
+    .modal-ov.open { display:flex; }
+    .modal-box { background:#fff; border-radius:20px; padding:28px; width:100%; max-width:420px; box-shadow:0 20px 60px rgba(13,31,92,.25); animation:su .25s ease; }
+    @keyframes su { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+    .modal-box h3 { font-family:'Playfair Display',serif; font-size:20px; color:var(--navy); margin-bottom:8px; }
+    .modal-box p  { font-size:13px; color:#8892b0; margin-bottom:16px; }
+    .modal-box label { font-size:12px; font-weight:600; color:#475569; display:block; margin-bottom:6px; }
+    .modal-box textarea { width:100%; padding:11px 13px; border:1.5px solid #dde4f5; border-radius:10px; font-family:'DM Sans',sans-serif; font-size:14px; resize:vertical; min-height:88px; outline:none; color:#1a2340; }
+    .modal-box textarea:focus { border-color:var(--red); }
+    .modal-btns { display:flex; gap:10px; margin-top:16px; }
+    .m-cancel  { flex:1; padding:11px; background:#f0f4ff; color:var(--navy); border:none; border-radius:10px; font-family:'DM Sans',sans-serif; font-size:14px; font-weight:600; cursor:pointer; }
+    .m-cancel:hover { background:var(--sky); }
+    .m-confirm { flex:1; padding:11px; background:var(--red); color:#fff; border:none; border-radius:10px; font-family:'DM Sans',sans-serif; font-size:14px; font-weight:700; cursor:pointer; }
+    .m-confirm:hover { background:#dc2626; }
+
+    /* TOAST */
+    .toast { position:fixed; bottom:24px; right:24px; color:#fff; padding:13px 22px; border-radius:12px; font-size:14px; font-weight:500; box-shadow:0 8px 30px rgba(0,0,0,.2); transform:translateY(80px); opacity:0; transition:all .3s; z-index:9999; background:var(--navy); }
+    .toast.show    { transform:translateY(0); opacity:1; }
+    .toast.success { background:#166534; }
+    .toast.error   { background:#991b1b; }
+
+    .tbl-foot { padding:12px 20px; border-top:1px solid #f0f4ff; font-size:12px; color:#8892b0; display:flex; justify-content:space-between; }
+    .grid-2   { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:22px; }
+    .spinner  { width:28px; height:28px; border:3px solid #dde4f5; border-top-color:var(--accent); border-radius:50%; animation:spin .7s linear infinite; margin:22px auto; }
+    @keyframes spin { to{transform:rotate(360deg)} }
+
+    .sb-overlay { display:none; }
+    @media(max-width:820px){
+      .sidebar{transform:translateX(-100%);} .sidebar.open{transform:translateX(0);}
+      .main{margin-left:0;} .mob-btn{display:block;}
+      .sb-overlay{display:block;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:199;opacity:0;pointer-events:none;transition:opacity .3s;}
+      .sb-overlay.show{opacity:1;pointer-events:all;}
+      .content{padding:16px 12px;} .grid-2{grid-template-columns:1fr;}
+    }
+  </style>
+</head>
+<body>
+
+<div class="sb-overlay" id="overlay" onclick="toggleSB()"></div>
+<div class="toast" id="toast"></div>
+
+<!-- REJECT MODAL -->
+<div class="modal-ov" id="rejectModal">
+  <div class="modal-box">
+    <h3>✕ Reject Appointment</h3>
+    <p>Provide a reason — it will be stored and shown in reports.</p>
+    <label>Reason for rejection *</label>
+    <textarea id="rejectReason" placeholder="e.g. Doctor unavailable on this date. Please reschedule."></textarea>
+    <div class="modal-btns">
+      <button class="m-cancel"  onclick="closeReject()">Cancel</button>
+      <button class="m-confirm" onclick="confirmReject()">Confirm Reject</button>
+    </div>
+  </div>
+</div>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sb-logo">
+    <img src="logo.jpg" alt="" onerror="this.style.display='none'"/>
+    <h2>Ek Noor Neki Da Hospital</h2>
+    <p>Admin Control Panel</p>
+  </div>
+  <div class="adm-badge">
+    <div class="adm-avatar">🛡️</div>
+    <div class="adm-name" id="adminName">Administrator</div>
+    <div class="adm-role" id="adminEmail">admin@hospital.com</div>
+    <div class="adm-pill">⚡ Super Admin</div>
+  </div>
+  <nav>
+    <div class="nav-lbl">Overview</div>
+    <a class="nav-item active" onclick="goSec('overview')"><span class="ico">📊</span>Dashboard</a>
+    <div class="nav-lbl">Hospital Data</div>
+    <a class="nav-item" onclick="goSec('appointments')"><span class="ico">📅</span>Appointments</a>
+    <a class="nav-item" onclick="goSec('patients')"><span class="ico">👥</span>Patients</a>
+    <div class="nav-lbl">System</div>
+    <a class="nav-item" onclick="goSec('users')"><span class="ico">🔑</span>User Accounts</a>
+    <a class="nav-item" onclick="goSec('loginlog')"><span class="ico">🕐</span>Login History</a>
+    <div class="nav-lbl">Navigation</div>
+    <a class="nav-item" href="patient.html"><span class="ico">🔗</span>Patient Portal</a>
+    <a class="nav-item" href="patient_dashboard.html"><span class="ico">📋</span>Patient Records</a>
+    <a class="nav-item" href="doctor_dashboard.html"><span class="ico">👨‍⚕️</span>Doctor Dashboard</a>
+  </nav>
+  <div class="sb-foot"><button class="logout-btn" onclick="doLogout()">⇠ Logout</button></div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div>
+      <button class="mob-btn" onclick="toggleSB()">☰</button>
+      <div class="topbar-title" id="pgTitle">Admin Dashboard</div>
+      <div class="topbar-sub"   id="pgSub">Full hospital overview & control</div>
+    </div>
+    <div class="topbar-right">
+      <span class="adm-chip">ADMIN</span>
+      <div class="date-chip" id="dateChip"></div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- OVERVIEW -->
+    <div id="sec-overview">
+      <div class="stats-grid">
+        <div class="stat-card c-amber"><div class="stat-ico">⏳</div><div class="stat-lbl">Pending</div><div class="stat-val" id="sP">—</div><div class="stat-sub">Need action</div></div>
+        <div class="stat-card c-green"><div class="stat-ico">✅</div><div class="stat-lbl">Accepted</div><div class="stat-val" id="sA">—</div><div class="stat-sub">Confirmed</div></div>
+        <div class="stat-card c-red">  <div class="stat-ico">✕</div> <div class="stat-lbl">Rejected</div><div class="stat-val" id="sR">—</div><div class="stat-sub">Declined</div></div>
+        <div class="stat-card c-blue"> <div class="stat-ico">👥</div><div class="stat-lbl">Patients</div><div class="stat-val" id="sPat">—</div><div class="stat-sub">Registered</div></div>
+        <div class="stat-card c-purple"><div class="stat-ico">🔑</div><div class="stat-lbl">Staff Users</div><div class="stat-val" id="sU">—</div><div class="stat-sub">Accounts</div></div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-head"><h3>Appointments by Dept</h3></div>
+          <div class="bar-chart" id="deptChart"><div class="spinner"></div></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h3>Appointment Status</h3></div>
+          <div class="bar-chart" id="statusChart"><div class="spinner"></div></div>
+        </div>
+      </div>
+
+      <!-- PENDING needing admin action -->
+      <div class="card">
+        <div class="card-head">
+          <h3>⏳ Pending Appointments — Action Required</h3>
+          <a style="font-size:12px;color:var(--accent);font-weight:600;cursor:pointer;" onclick="goSec('appointments')">Manage all →</a>
+        </div>
+        <div id="ovPending"><div class="spinner"></div></div>
+      </div>
+    </div>
+
+    <!-- APPOINTMENTS -->
+    <div id="sec-appointments" style="display:none;">
+      <div class="card">
+        <div class="card-head">
+          <h3>All Appointments</h3>
+          <div class="filter-row">
+            <input class="f-input" id="apptSearch" placeholder="Search patient..." oninput="renderAppts()"/>
+            <select class="f-select" id="apptSF" onchange="renderAppts()">
+              <option value="">All Status</option>
+              <option value="pending">Pending</option>
+              <option value="accepted">Accepted</option>
+              <option value="rejected">Rejected</option>
+            </select>
+            <select class="f-select" id="apptDF" onchange="renderAppts()">
+              <option value="">All Depts</option>
+            </select>
+            <button class="btn-sm btn-sky" onclick="loadAppts()">↻ Refresh</button>
+          </div>
+        </div>
+        <div class="stabs">
+          <button class="stab active-tab" id="tab-all"      onclick="setTab('all')">All <span id="cnt-all"></span></button>
+          <button class="stab"            id="tab-pending"  onclick="setTab('pending')">⏳ Pending <span id="cnt-p"></span></button>
+          <button class="stab"            id="tab-accepted" onclick="setTab('accepted')">✅ Accepted <span id="cnt-a"></span></button>
+          <button class="stab"            id="tab-rejected" onclick="setTab('rejected')">✕ Rejected <span id="cnt-r"></span></button>
+        </div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>#</th><th>Patient</th><th>Phone</th><th>Email</th><th>Department</th><th>Doctor</th><th>Date</th><th>Status</th><th>Reason</th><th>Actions</th></tr></thead>
+            <tbody id="apptBody"><tr><td colspan="10" style="text-align:center;padding:28px;"><div class="spinner"></div></td></tr></tbody>
+          </table>
+        </div>
+        <div class="tbl-foot"><span id="apptCount">—</span><span id="apptTime" style="color:#b0bac9;font-size:11px;"></span></div>
+      </div>
+    </div>
+
+    <!-- PATIENTS -->
+    <div id="sec-patients" style="display:none;">
+      <div class="card">
+        <div class="card-head">
+          <h3>All Registered Patients</h3>
+          <div class="filter-row">
+            <input class="f-input" id="patSearch" placeholder="Search name..." oninput="filterPats()"/>
+            <select class="f-select" id="patGF" onchange="filterPats()">
+              <option value="">All Genders</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+            <button class="btn-sm btn-sky" onclick="loadPats()">↻ Refresh</button>
+          </div>
+        </div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>ID</th><th>Name</th><th>Phone</th><th>Age</th><th>Gender</th><th>Relation</th><th>Condition</th><th>Registered</th></tr></thead>
+            <tbody id="patBody"><tr><td colspan="8" style="text-align:center;padding:28px;"><div class="spinner"></div></td></tr></tbody>
+          </table>
+        </div>
+        <div class="tbl-foot"><span id="patCount">—</span><span id="patTime" style="color:#b0bac9;font-size:11px;"></span></div>
+      </div>
+    </div>
+
+    <!-- USERS -->
+    <div id="sec-users" style="display:none;">
+      <div class="card">
+        <div class="card-head"><h3>Staff User Accounts</h3><button class="btn-sm btn-sky" onclick="loadUsers()">↻ Refresh</button></div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>#</th><th>Email</th><th>Total Logins</th><th>Role</th><th>Action</th></tr></thead>
+            <tbody id="usersBody"><tr><td colspan="5" style="text-align:center;padding:28px;"><div class="spinner"></div></td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- LOGIN LOG -->
+    <div id="sec-loginlog" style="display:none;">
+      <div class="card">
+        <div class="card-head"><h3>Login History</h3><button class="btn-sm btn-sky" onclick="loadUsers()">↻ Refresh</button></div>
+        <div id="loginHistList"><div class="spinner"></div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  const BASE='http://localhost:5002';
+  const now=new Date();
+  let allAppts=[],allPats=[],loginHist=[],curTab='all',rejectId=null;
+
+  /* DATE */
+  document.getElementById('dateChip').textContent=
+    now.toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short'});
+
+  /* ADMIN INFO */
+  (function(){
+    try{
+      const u=JSON.parse(localStorage.getItem('hospital_user')||localStorage.getItem('tl_currentUser')||'{}');
+      if(u.email||u.name){
+        document.getElementById('adminName').textContent=u.name||'Administrator';
+        document.getElementById('adminEmail').textContent=u.email||'admin@hospital.com';
+      }
+    }catch(e){}
+  })();
+
+  /* TOAST */
+  function toast(msg,type=''){
+    const t=document.getElementById('toast');
+    t.textContent=msg; t.className='toast show '+type;
+    setTimeout(()=>t.className='toast',3000);
+  }
+
+  /* SIDEBAR */
+  function toggleSB(){
+    document.getElementById('sidebar').classList.toggle('open');
+    document.getElementById('overlay').classList.toggle('show');
+  }
+
+  /* SECTIONS */
+  const SECS=['overview','appointments','patients','users','loginlog'];
+  const TITLES={overview:['Admin Dashboard','Full hospital overview & control'],appointments:['Appointments','Accept, reject & manage all appointments'],patients:['Patient Records','All registered patients'],users:['User Accounts','Staff login management'],loginlog:['Login History','System access audit trail']};
+  function goSec(name){
+    SECS.forEach(s=>document.getElementById('sec-'+s).style.display=s===name?'block':'none');
+    document.querySelectorAll('.nav-item').forEach(el=>{
+      el.classList.remove('active');
+      if(el.getAttribute('onclick')&&el.getAttribute('onclick').includes(name))el.classList.add('active');
+    });
+    document.getElementById('pgTitle').textContent=TITLES[name][0];
+    document.getElementById('pgSub').textContent  =TITLES[name][1];
+    if(name==='appointments') loadAppts();
+    if(name==='patients')     loadPats();
+    if(name==='users'||name==='loginlog') loadUsers();
+  }
+
+  /* STATUS BADGE */
+  function badge(s){
+    if(s==='accepted') return '<span class="sb sb-accepted"><span class="sdot sdot-a"></span>Accepted</span>';
+    if(s==='rejected') return '<span class="sb sb-rejected"><span class="sdot sdot-r"></span>Rejected</span>';
+    return '<span class="sb sb-pending"><span class="sdot sdot-p"></span>Pending</span>';
+  }
+
+  /* server.py (auth) runs on 5000 — login_history lives there, not on appointment.py */
+  const AUTH_BASE='http://localhost:5001';
+
+  /* OVERVIEW — each fetch is independent so one failure never kills the whole dashboard */
+  async function loadOverview(){
+    // 1. Appointments
+    try{
+      const r=await fetch(BASE+'/appointments');
+      allAppts=await r.json();
+    }catch(e){
+      allAppts=[];
+      document.getElementById('ovPending').innerHTML='<p style="padding:20px;color:#991b1b;text-align:center;font-size:13px;">⚠ Could not reach appointment.py (port 5001). Make sure it is running.</p>';
+    }
+
+    // 2. Patients
+    try{
+      const r=await fetch(BASE+'/get-all-patients');
+      allPats=await r.json();
+    }catch(e){
+      allPats=[];
+    }
+
+    // 3. Login history — from server.py port 5000 (where login data actually lives)
+    try{
+      const r=await fetch(AUTH_BASE+'/login_history');
+      loginHist=await r.json();
+    }catch(e){
+      loginHist=[];
+    }
+
+    refreshOverviewStats();
+  }
+
+  function refreshOverviewStats(){
+    const pending =allAppts.filter(a=>a.status==='pending');
+    const accepted=allAppts.filter(a=>a.status==='accepted');
+    const rejected=allAppts.filter(a=>a.status==='rejected');
+    document.getElementById('sP').textContent  =pending.length;
+    document.getElementById('sA').textContent  =accepted.length;
+    document.getElementById('sR').textContent  =rejected.length;
+    document.getElementById('sPat').textContent=allPats.length;
+    document.getElementById('sU').textContent  =loginHist.length;
+
+    /* dept chart */
+    const counts={};
+    allAppts.forEach(a=>{counts[a.department]=(counts[a.department]||0)+1;});
+    const sorted=Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,6);
+    const max=sorted[0]?.[1]||1;
+    const cols=['#4f8ef7','#22c55e','#f59e0b','#8b5cf6','#ef4444','#14b8a6'];
+    const dEl=document.getElementById('deptChart');
+    dEl.innerHTML=sorted.length===0
+      ?'<p style="padding:18px;color:#8892b0;text-align:center;font-size:13px;">No data yet.</p>'
+      :sorted.map(([dept,cnt],i)=>`
+        <div class="bar-row">
+          <div class="bar-lbl">${dept.length>13?dept.substring(0,13)+'…':dept}</div>
+          <div class="bar-track"><div class="bar-fill" style="width:${(cnt/max)*100}%;background:${cols[i%cols.length]};"></div></div>
+          <div class="bar-cnt">${cnt}</div>
+        </div>`).join('');
+
+    /* status chart */
+    const total=allAppts.length||1;
+    document.getElementById('statusChart').innerHTML=[
+      ['Pending', pending.length,  '#f59e0b'],
+      ['Accepted',accepted.length, '#22c55e'],
+      ['Rejected',rejected.length, '#ef4444'],
+    ].map(([label,cnt,color])=>`
+      <div class="bar-row">
+        <div class="bar-lbl">${label}</div>
+        <div class="bar-track"><div class="bar-fill" style="width:${(cnt/total)*100}%;background:${color};"></div></div>
+        <div class="bar-cnt">${cnt}</div>
+      </div>`).join('');
+
+    /* pending list */
+    const pEl=document.getElementById('ovPending');
+    pEl.innerHTML=pending.length===0
+      ?'<p style="padding:22px;text-align:center;color:#8892b0;font-size:13px;">🎉 No pending appointments!</p>'
+      :pending.slice(0,8).map(a=>`
+        <div style="display:flex;align-items:center;gap:12px;padding:13px 20px;border-bottom:1px solid #f0f4ff;" id="ovcr-${a.id}">
+          <div style="min-width:48px;background:var(--sky);color:var(--navy);border-radius:8px;padding:5px 7px;font-size:11px;font-weight:700;text-align:center;">${fmtD(a.date)}</div>
+          <div style="flex:1;">
+            <div style="font-size:14px;font-weight:600;color:var(--navy);">${a.full_name}</div>
+            <div style="font-size:12px;color:#8892b0;">${a.department}${a.doctor?' · '+a.doctor:''} · 📞 ${a.phone}</div>
+          </div>
+          <div class="acts">
+            <button class="btn-acc" onclick="accept(${a.id})">✓ Accept</button>
+            <button class="btn-rej" onclick="openReject(${a.id})">✕ Reject</button>
+          </div>
+        </div>`).join('');
+  }
+
+  /* LOAD APPOINTMENTS */
+  async function loadAppts(){
+    document.getElementById('apptBody').innerHTML='<tr><td colspan="10" style="text-align:center;padding:28px;"><div class="spinner"></div></td></tr>';
+    try{
+      const res=await fetch(BASE+'/appointments');
+      allAppts=await res.json();
+      populateDeptFilter();
+      updateTabCounts();
+      renderAppts();
+      document.getElementById('apptTime').textContent='Updated '+new Date().toLocaleTimeString('en-IN');
+    }catch(e){
+      document.getElementById('apptBody').innerHTML='<tr><td colspan="10" style="text-align:center;padding:28px;color:#991b1b;">Server not reachable.</td></tr>';
+    }
+  }
+
+  function populateDeptFilter(){
+    const sel=document.getElementById('apptDF');
+    const depts=[...new Set(allAppts.map(a=>a.department))];
+    sel.innerHTML='<option value="">All Depts</option>'+depts.map(d=>`<option value="${d}">${d}</option>`).join('');
+  }
+
+  function updateTabCounts(){
+    document.getElementById('cnt-all').textContent='('+allAppts.length+')';
+    document.getElementById('cnt-p').textContent  ='('+allAppts.filter(a=>a.status==='pending').length+')';
+    document.getElementById('cnt-a').textContent  ='('+allAppts.filter(a=>a.status==='accepted').length+')';
+    document.getElementById('cnt-r').textContent  ='('+allAppts.filter(a=>a.status==='rejected').length+')';
+  }
+
+  function setTab(tab){
+    curTab=tab;
+    document.querySelectorAll('.stab').forEach(b=>b.classList.remove('active-tab'));
+    document.getElementById('tab-'+tab).classList.add('active-tab');
+    renderAppts();
+  }
+
+  function renderAppts(){
+    const q =(document.getElementById('apptSearch')?.value||'').toLowerCase();
+    const sf= document.getElementById('apptSF')?.value||'';
+    const df= document.getElementById('apptDF')?.value||'';
+    const data=allAppts.filter(a=>
+      (curTab==='all'||a.status===curTab)&&
+      (!q||a.full_name.toLowerCase().includes(q))&&
+      (!sf||a.status===sf)&&
+      (!df||a.department===df)
+    );
+    document.getElementById('apptCount').textContent=`Showing ${data.length} of ${allAppts.length}`;
+    const body=document.getElementById('apptBody');
+    if(data.length===0){body.innerHTML='<tr><td colspan="10" style="text-align:center;padding:28px;color:#8892b0;">No appointments found.</td></tr>';return;}
+    body.innerHTML=data.map(a=>`
+      <tr id="row-${a.id}">
+        <td><span style="background:var(--sky);color:var(--blue);font-size:11px;font-weight:700;padding:3px 9px;border-radius:6px;font-family:monospace;">#${String(a.id).padStart(4,'0')}</span></td>
+        <td style="font-weight:600;color:var(--navy);">${a.full_name}</td>
+        <td>${a.phone}</td>
+        <td>${a.email||'—'}</td>
+        <td>${a.department}</td>
+        <td>${a.doctor||'—'}</td>
+        <td>${fmtDFull(a.date)}</td>
+        <td>${badge(a.status)}</td>
+        <td style="max-width:140px;font-size:11px;color:#6b7a99;">${a.reason||'—'}</td>
+        <td>
+          <div class="acts">
+            ${a.status!=='accepted'?`<button class="btn-acc" onclick="accept(${a.id})" title="Accept">✓</button>`:''}
+            ${a.status!=='rejected'?`<button class="btn-rej" onclick="openReject(${a.id})" title="Reject">✕</button>`:''}
+            ${a.status!=='pending' ?`<button class="btn-rst" onclick="resetA(${a.id})"   title="Reset to pending">↺</button>`:''}
+            <button class="btn-del" onclick="delAppt(${a.id})" title="Delete permanently">🗑</button>
+          </div>
+        </td>
+      </tr>`).join('');
+  }
+
+  /* ACCEPT */
+  async function accept(id){
+    try{
+      const res=await fetch(`${BASE}/appointment/${id}/accept`,{method:'POST'});
+      const d=await res.json();
+      if(d.success){toast('✓ Appointment accepted','success');await fullRefresh();}
+      else toast(d.message||'Error','error');
+    }catch(e){toast('Server not reachable','error');}
+  }
+
+  /* REJECT MODAL */
+  function openReject(id){
+    rejectId=id;
+    document.getElementById('rejectReason').value='';
+    document.getElementById('rejectModal').classList.add('open');
+    setTimeout(()=>document.getElementById('rejectReason').focus(),100);
+  }
+  function closeReject(){
+    rejectId=null;
+    document.getElementById('rejectModal').classList.remove('open');
+  }
+  async function confirmReject(){
+    const reason=document.getElementById('rejectReason').value.trim();
+    if(!reason){document.getElementById('rejectReason').style.border='1.5px solid var(--red)';return;}
+    try{
+      const res=await fetch(`${BASE}/appointment/${rejectId}/reject`,{
+        method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({reason})
+      });
+      const d=await res.json();
+      if(d.success){toast('✕ Appointment rejected','error');closeReject();await fullRefresh();}
+      else toast(d.message||'Error','error');
+    }catch(e){toast('Server not reachable','error');}
+  }
+
+  /* RESET */
+  async function resetA(id){
+    try{
+      const res=await fetch(`${BASE}/appointment/${id}/reset`,{method:'POST'});
+      const d=await res.json();
+      if(d.success){toast('↺ Reset to pending');await fullRefresh();}
+      else toast(d.message||'Error','error');
+    }catch(e){toast('Server not reachable','error');}
+  }
+
+  /* DELETE APPOINTMENT */
+  async function delAppt(id){
+    if(!confirm('Permanently delete this appointment? This cannot be undone.'))return;
+    try{
+      const res=await fetch(`${BASE}/appointment/${id}/delete`,{method:'DELETE'});
+      const d=await res.json();
+      if(d.success){toast('🗑 Appointment deleted');await fullRefresh();}
+      else toast(d.message||'Error','error');
+    }catch(e){toast('Server not reachable','error');}
+  }
+
+  /* FULL REFRESH */
+  async function fullRefresh(){
+    const[aR]=await Promise.all([fetch(BASE+'/appointments')]);
+    allAppts=await aR.json();
+    refreshOverviewStats();
+    if(document.getElementById('sec-appointments').style.display!=='none'){
+      updateTabCounts(); renderAppts();
+    }
+  }
+
+  /* PATIENTS */
+  async function loadPats(){
+    const body=document.getElementById('patBody');
+    body.innerHTML='<tr><td colspan="8" style="text-align:center;padding:28px;"><div class="spinner"></div></td></tr>';
+    try{
+      const res=await fetch(BASE+'/get-all-patients');
+      allPats=await res.json();
+      filterPats();
+      document.getElementById('patTime').textContent='Updated '+new Date().toLocaleTimeString('en-IN');
+    }catch(e){body.innerHTML='<tr><td colspan="8" style="text-align:center;padding:28px;color:#991b1b;">Server not reachable.</td></tr>';}
+  }
+
+  function filterPats(){
+    const q=document.getElementById('patSearch')?.value.toLowerCase()||'';
+    const g=document.getElementById('patGF')?.value||'';
+    const data=allPats.filter(p=>(!q||p.name.toLowerCase().includes(q))&&(!g||p.gender===g));
+    document.getElementById('patCount').textContent=`Showing ${data.length} of ${allPats.length}`;
+    const body=document.getElementById('patBody');
+    if(data.length===0){body.innerHTML='<tr><td colspan="8" style="text-align:center;padding:28px;color:#8892b0;">No patients found.</td></tr>';return;}
+    body.innerHTML=data.map(p=>{
+      const dt=new Date(p.created_at).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
+      const gc=p.gender==='Male'?'sb-accepted':p.gender==='Female'?'sb-pending':'sb-rejected';
+      return`<tr>
+        <td><span style="background:var(--sky);color:var(--blue);font-size:11px;font-weight:700;padding:3px 9px;border-radius:6px;">#${String(p.id).padStart(4,'0')}</span></td>
+        <td style="font-weight:600;color:var(--navy);">${p.name}</td>
+        <td>${p.phone}</td><td>${p.age} yrs</td>
+        <td><span class="sb ${gc}">${p.gender}</span></td>
+        <td>${p.relation}</td>
+        <td>${p.condition?`<span style="background:#fff7ed;color:#9a3412;font-size:11px;padding:3px 8px;border-radius:6px;">${p.condition}</span>`:'—'}</td>
+        <td>${dt}</td></tr>`;
+    }).join('');
+  }
+
+  /* USERS / LOGIN HISTORY — fetches from server.py (port 5000) where auth data lives */
+  async function loadUsers(){
+    document.getElementById('usersBody').innerHTML='<tr><td colspan="5" style="text-align:center;padding:28px;"><div class="spinner"></div></td></tr>';
+    document.getElementById('loginHistList').innerHTML='<div class="spinner"></div>';
+    try{
+      const res=await fetch(AUTH_BASE+'/login_history');
+      loginHist=await res.json();
+      document.getElementById('sU').textContent=loginHist.length;
+
+      /* users table */
+      document.getElementById('usersBody').innerHTML=loginHist.length===0
+        ?'<tr><td colspan="5" style="text-align:center;padding:28px;color:#8892b0;">No users found.</td></tr>'
+        :loginHist.map((u,i)=>`
+          <tr>
+            <td style="font-size:12px;color:#8892b0;">${i+1}</td>
+            <td style="font-weight:600;color:var(--navy);">${u.email}</td>
+            <td><span class="sb sb-accepted">${u.total_logins} login${u.total_logins!==1?'s':''}</span></td>
+            <td><span class="sb" style="background:#f3e8ff;color:#6b21a8;">Staff</span></td>
+            <td><button class="btn-del" onclick="delUser('${u.email}')">🗑 Delete</button></td>
+          </tr>`).join('');
+
+      /* login hist list */
+      document.getElementById('loginHistList').innerHTML=loginHist.length===0
+        ?'<p style="padding:28px;text-align:center;color:#8892b0;font-size:13px;">No login history.</p>'
+        :loginHist.map(u=>`
+          <div class="hist-item">
+            <div class="hist-av">${u.email.charAt(0).toUpperCase()}</div>
+            <div>
+              <div style="font-size:13px;font-weight:600;color:var(--navy);">${u.email}</div>
+              <div style="font-size:11px;color:#8892b0;">Staff Account</div>
+            </div>
+            <div class="hist-cnt">${u.total_logins} session${u.total_logins!==1?'s':''}</div>
+          </div>`).join('');
+    }catch(e){
+      document.getElementById('usersBody').innerHTML='<tr><td colspan="5" style="text-align:center;padding:28px;color:#991b1b;">server.py not reachable on port 5000.</td></tr>';
+      document.getElementById('loginHistList').innerHTML='<p style="padding:20px;color:#991b1b;text-align:center;">server.py not reachable on port 5000.</p>';
+    }
+  }
+
+  /* DELETE USER — goes to server.py (port 5000) where user accounts are stored */
+  async function delUser(email){
+    if(!confirm(`Delete account: ${email}?`))return;
+    try{
+      const res=await fetch(AUTH_BASE+'/delete_user',{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({email})});
+      const d=await res.json();
+      if(res.ok){toast('✓ User deleted: '+email,'success');loadUsers();}
+      else toast(d.error||'Delete failed.','error');
+    }catch(e){toast('Server not reachable','error');}
+  }
+
+  /* HELPERS */
+  function fmtD(d)    {return d?new Date(d).toLocaleDateString('en-IN',{day:'numeric',month:'short'}):'—';}
+  function fmtDFull(d){return d?new Date(d).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}):'—';}
+
+  /* LOGOUT */
+  function doLogout(){
+    ['hospital_user','tl_loggedIn','tl_currentUser'].forEach(k=>localStorage.removeItem(k));
+    window.location.href='login1.html';
+  }
+
+  /* MODAL OUTSIDE CLICK */
+  document.getElementById('rejectModal').addEventListener('click',function(e){if(e.target===this)closeReject();});
+
+  /* INIT */
+  loadOverview();
+</script>
+</body>
+</html>

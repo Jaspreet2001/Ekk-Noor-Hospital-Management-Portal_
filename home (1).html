@@ -1,0 +1,1328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="logo.jpg" type="image">
+<link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+
+<title>Ek Noor Neki Da Hospital</title>
+
+<style>
+
+/* ── VARIABLES ── */
+:root {
+  --navy: #0d1f5c;
+  --blue: #1a3bb5;
+  --accent: #4f8ef7;
+  --sky: #e8f0fe;
+  --white: #ffffff;
+  --text-light: #c8d6ff;
+  --shadow: 0 8px 32px rgba(13,31,92,0.18);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body { font-family: 'DM Sans', sans-serif; background: #f4f7ff; }
+
+/* ── NAVBAR ── */
+@keyframes navAnim {
+  from { background-color: rgba(60,91,170,0.97); }
+  to   { background-color: rgba(15,40,165,0.97); }
+}
+.navbar-custom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 28px;
+  animation: navAnim 5s infinite alternate;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+}
+.logo { width: 52px; height: 52px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.3); }
+.title {
+  color: white;
+  font-size: 20px;
+  font-weight: 600;
+  margin-left: 12px;
+  font-family: 'Playfair Display', serif;
+  letter-spacing: 0.5px;
+}
+.left { display: flex; align-items: center; }
+.menu { list-style: none; display: flex; gap: 4px; margin: 0; }
+.menu li a {
+  text-decoration: none;
+  color: rgba(255,255,255,0.85);
+  font-size: 14px;
+  font-weight: 400;
+  padding: 8px 14px;
+  border-radius: 8px;
+  transition: 0.2s;
+}
+.menu li a:hover {
+  background: rgba(255,255,255,0.15);
+  color: white;
+}
+.menu-toggle { display: none; font-size: 26px; color: white; cursor: pointer; background: none; border: none; }
+
+/* ── HERO ── */
+.intro {
+  position: relative;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: white;
+  padding: 0 20px;
+  overflow: hidden;
+}
+.bg-video {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  z-index: -2;
+}
+.overlay {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: linear-gradient(180deg, rgba(13,31,92,0.75) 0%, rgba(0,0,0,0.55) 100%);
+  z-index: -1;
+}
+.intro h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 72px;
+  font-weight: 700;
+  line-height: 1.1;
+  margin-bottom: 14px;
+}
+.intro h3 {
+  font-size: 22px;
+  font-weight: 300;
+  color: rgba(255,255,255,0.85);
+  margin-bottom: 32px;
+  letter-spacing: 1px;
+}
+
+/* FIX 11: JS-powered typewriter replaces unreliable CSS content animation */
+.change_content {
+  color: #a5c0ff;
+  font-weight: 500;
+  transition: opacity 0.4s ease;
+}
+.change_content.fade { opacity: 0; }
+
+.hero-collapse {
+  max-width: 560px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 14px;
+  padding: 20px 24px;
+  font-size: 15px;
+  line-height: 1.7;
+  color: rgba(255,255,255,0.9);
+  margin-top: 65px;
+}
+
+/* ── SECTION LABEL ── */
+.section-label {
+  text-align: center;
+  font-size: 12px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #8892b0;
+  font-weight: 500;
+  margin: 56px 0 8px;
+}
+.section-title {
+  text-align: center;
+  font-family: 'Playfair Display', serif;
+  font-size: 34px;
+  color: var(--navy);
+  margin-bottom: 40px;
+  font-weight: 700;
+}
+.section-title-blue {
+  text-align: center;
+  font-size: 12px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #4f8ef7;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+/* ── FOR VISITORS CARDS ── */
+.vcard {
+  background: var(--navy);
+  border-radius: 20px;
+  padding: 28px 24px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.vcard:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px rgba(13,31,92,0.3);
+}
+.vcard::before {
+  content: '';
+  position: absolute;
+  top: -40px; right: -40px;
+  width: 110px; height: 110px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.05);
+}
+.vcard::after {
+  content: '';
+  position: absolute;
+  bottom: -20px; left: -20px;
+  width: 70px; height: 70px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.03);
+}
+.vcard-accent  { background: linear-gradient(135deg, #1a3bb5, #2d5be3); }
+.vcard-accent2 { background: linear-gradient(135deg, #0f2d6b, #1a3bb5); }
+
+.vcard-icon {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.14);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.vcard-icon svg { width: 22px; height: 22px; fill: white; }
+
+.vcard-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: white;
+  margin: 0;
+  font-family: 'Playfair Display', serif;
+}
+.vcard-desc {
+  font-size: 14px;
+  color: rgba(255,255,255,0.65);
+  line-height: 1.6;
+  margin: 0;
+  flex: 1;
+}
+.vcard-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+  padding: 10px 20px;
+  border-radius: 50px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  background: white;
+  color: var(--navy);
+  border: none;
+  width: fit-content;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.2s ease;
+}
+.vcard-btn:hover {
+  background: var(--sky);
+  transform: translateY(-1px);
+  color: var(--navy);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+}
+
+/* pulse dot */
+.pulse-dot {
+  display: inline-block;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: #4ade80;
+  margin-right: 5px;
+  animation: pulse 1.5s infinite;
+  vertical-align: middle;
+}
+@keyframes pulse {
+  0%,100% { opacity:1; transform:scale(1); }
+  50%      { opacity:0.5; transform:scale(1.4); }
+}
+
+/* ── DEPARTMENT CARDS ── */
+.deppt-card {
+  border: none;
+  border-radius: 16px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(16,69,114,0.12);
+  overflow: hidden;
+  text-align: center;
+  background: white;
+}
+.deppt-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 36px rgba(29,59,92,0.2);
+}
+.deppt-card .card-header {
+  background: linear-gradient(135deg, #1a3bb5, #4f8ef7);
+  color: white;
+  font-weight: 600;
+  padding: 12px 8px;
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border: none;
+}
+.deppt-card img {
+  height: 80px;
+  object-fit: contain;
+  margin: 16px 0;
+  transition: transform 0.3s ease;
+}
+.deppt-card:hover img { transform: scale(1.1); }
+.deppt-card .card-footer {
+  font-size: 12px;
+  padding: 10px 8px;
+  color: #6b7a99;
+  background: white;
+  border: none;
+}
+
+/* ── SERVICES CARDS ── */
+.service-card {
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(13,31,92,0.1);
+  background: white;
+  border: none;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+.service-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 36px rgba(13,31,92,0.18);
+}
+.service-card .card-body { padding: 32px 28px; }
+.service-card h4 {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  color: var(--navy);
+  margin-bottom: 16px;
+}
+.service-collapse {
+  background: var(--sky);
+  border-radius: 10px;
+  padding: 16px;
+  font-size: 14px;
+  color: #3a4a7a;
+  line-height: 1.7;
+  margin-top: 14px;
+}
+
+/* ── MODAL ── */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 9999;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background: rgba(13,31,92,0.55);
+  overflow: auto;
+  animation: fadeIn 0.2s ease;
+}
+@keyframes fadeIn  { from { opacity:0 } to { opacity:1 } }
+@keyframes slideUp { from { opacity:0; transform:translateY(30px) } to { opacity:1; transform:translateY(0) } }
+
+.modal-content {
+  background: white;
+  margin: 4% auto;
+  padding: 48px 44px;
+  width: 90%;
+  max-width: 580px;
+  border-radius: 24px;
+  position: relative;
+  box-shadow: 0 24px 60px rgba(13,31,92,0.3);
+  animation: slideUp 0.3s ease;
+}
+.modal-content .modal-header {
+  border: none;
+  padding: 0;
+  margin-bottom: 28px;
+  display: block;
+}
+.modal-content .modal-header .badge {
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 600;
+  background: none;
+  padding: 0;
+}
+.modal-content .modal-header h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 30px;
+  color: var(--navy);
+  margin-top: 6px;
+  font-weight: 700;
+}
+.modal-close {
+  position: absolute;
+  right: 20px; top: 18px;
+  width: 36px; height: 36px;
+  background: #f0f4ff;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  cursor: pointer;
+  color: #7a8ab0;
+  transition: all 0.2s ease;
+  border: none;
+  line-height: 1;
+}
+.modal-close:hover { background: #e0e8ff; color: var(--navy); transform: rotate(90deg); }
+
+.form-group { margin-bottom: 18px; }
+.form-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  color: var(--navy);
+  margin-bottom: 7px;
+}
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 13px 16px;
+  border: 1.5px solid #dde4f5;
+  border-radius: 12px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  color: #1a2340;
+  background: #f8faff;
+  transition: all 0.2s ease;
+  outline: none;
+}
+.form-group input:focus,
+.form-group select:focus {
+  border-color: var(--accent);
+  background: white;
+  box-shadow: 0 0 0 4px rgba(79,142,247,0.12);
+}
+/* FIX 13: Hint text below phone field */
+.field-hint {
+  font-size: 12px;
+  color: #9aaccc;
+  margin-top: 5px;
+}
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.optional-tag { font-weight: 400; color: #9aaccc; font-size: 12px; margin-left: 4px; }
+.form-actions { display: flex; gap: 12px; margin-top: 28px; }
+.btn-submit {
+  flex: 1; padding: 14px;
+  background: linear-gradient(135deg, var(--navy), var(--blue));
+  color: white; border: none; border-radius: 12px;
+  font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600;
+  cursor: pointer; transition: all 0.25s ease;
+}
+.btn-submit:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(26,59,181,0.35); }
+/* FIX 10: Disabled loading state */
+.btn-submit:disabled { opacity: 0.65; cursor: not-allowed; transform: none; }
+.btn-cancel {
+  padding: 14px 22px;
+  background: #f0f4ff; color: #5a6a8a;
+  border: none; border-radius: 12px;
+  font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500;
+  cursor: pointer; transition: all 0.2s ease;
+}
+.btn-cancel:hover { background: #e0e8ff; color: var(--navy); }
+
+.success-msg { display: none; text-align: center; padding: 30px 0; }
+.success-msg .checkmark {
+  width: 72px; height: 72px;
+  background: #e8f5e9; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 32px; margin: 0 auto 20px;
+}
+.success-msg h3 { font-family: 'Playfair Display', serif; color: var(--navy); font-size: 24px; margin-bottom: 8px; }
+.success-msg p  { color: #5a6a8a; font-size: 15px; }
+
+/* ── FOOTER ── */
+.hospital-footer {
+  background: #07122a;
+  color: #cdd5e8;
+  padding: 56px 28px 24px;
+  font-size: 14.5px;
+  margin-top: 60px;
+}
+.footer-container {
+  max-width: 1100px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 36px;
+}
+.footer-box h3, .footer-box h4 { color: #ffffff; margin-bottom: 14px; font-weight: 600; font-family: 'Playfair Display', serif; }
+.footer-box p  { line-height: 1.8; color: #9aa4be; }
+.footer-box ul { list-style: none; padding: 0; }
+.footer-box ul li { margin-bottom: 10px; line-height: 1.7; color: #9aa4be; }
+.footer-box a  { color: #7eb8f7; text-decoration: none; transition: color 0.2s; }
+.footer-box a:hover { color: white; }
+.footer-bottom {
+  max-width: 1100px; margin: 28px auto 0;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  text-align: center;
+  font-size: 13px; color: #6b7a99;
+}
+.contains { background: #6c8bdf; padding-bottom: 60px; }
+
+/* ── MOBILE ── */
+@media (max-width: 768px) {
+  .title { font-size: 15px; }
+  .menu {
+    display: none; flex-direction: column;
+    position: absolute; top: 78px; right: 0;
+    background: #0f28a5; width: 200px;
+    padding: 16px; border-radius: 0 0 12px 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+  }
+  .menu.active { display: flex; }
+  .menu-toggle { display: block; }
+  .intro h1 { font-size: 42px; }
+  .intro h3  { font-size: 17px; }
+  .form-row  { grid-template-columns: 1fr; }
+  .modal-content { padding: 36px 20px; }
+  .vcard { margin-bottom: 4px; }
+}
+</style>
+
+<!-- ===== AI CHAT BUTTON ===== -->
+<style>
+  #ai-float-btn {
+    position: fixed !important;
+    bottom: 30px !important;
+    right: 30px !important;
+    z-index: 999999 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 8px !important;
+    cursor: pointer !important;
+  }
+
+  #ai-float-bubble {
+    background: #1a3bb5;
+    color: white;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 6px 14px;
+    border-radius: 20px;
+    white-space: nowrap;
+    box-shadow: 0 4px 15px rgba(26,59,181,0.4);
+    font-family: 'DM Sans', sans-serif;
+    animation: aiBubbleFloat 2s ease-in-out infinite;
+  }
+
+  @keyframes aiBubbleFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+  }
+
+  #ai-float-circle {
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #1a3bb5, #4f8ef7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid white;
+    animation: aiPulseRing 2s infinite;
+    transition: transform 0.2s;
+  }
+
+  #ai-float-circle:hover { transform: scale(1.1); }
+
+  @keyframes aiPulseRing {
+    0%   { box-shadow: 0 0 0 0 rgba(26,59,181,0.6), 0 6px 25px rgba(26,59,181,0.4); }
+    70%  { box-shadow: 0 0 0 14px rgba(26,59,181,0), 0 6px 25px rgba(26,59,181,0.4); }
+    100% { box-shadow: 0 0 0 0 rgba(26,59,181,0), 0 6px 25px rgba(26,59,181,0.4); }
+  }
+
+  #ai-float-circle svg {
+    width: 32px;
+    height: 32px;
+    fill: white;
+  }
+
+  #ai-modal-overlay {
+    display: none;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    background: rgba(0,0,0,0.6);
+    z-index: 9999999 !important;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  #ai-modal-overlay.ai-active {
+    display: flex !important;
+  }
+
+  #ai-modal-box {
+    width: 100%;
+    max-width: 780px;
+    height: min(700px, calc(100vh - 40px));
+    background: white;
+    border-radius: 28px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    position: relative;
+  }
+
+  #ai-close-btn {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    z-index: 10;
+    background: rgba(255,255,255,0.2);
+    border: none;
+    color: white;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #ai-close-btn:hover { background: rgba(255,255,255,0.35); }
+
+  #ai-modal-box iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+  }
+</style>
+  
+<!-- ── CONTACT SECTION ── -->
+<style>
+.contact-section {
+  background: linear-gradient(160deg, #0b1d57 0%, #1a3bb5 100%);
+  padding: 80px 28px;
+}
+.contact-top {
+  max-width: 1000px;
+  margin: 0 auto 52px;
+  text-align: center;
+}
+.contact-top-label {
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #a5c0ff;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+.contact-top-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 38px;
+  color: white;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 14px;
+}
+.contact-top-sub {
+  font-size: 15px;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.7;
+  max-width: 560px;
+  margin: 0 auto;
+}
+.cinfo-grid {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+.cinfo-card {
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 20px;
+  padding: 32px 24px 28px;
+  text-align: center;
+  transition: transform 0.3s ease, background 0.3s ease;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+}
+.cinfo-card:hover {
+  transform: translateY(-6px);
+  background: rgba(255,255,255,0.13);
+}
+.cinfo-icon {
+  width: 56px;
+  height: 56px;
+  overflow: hidden;
+}
+
+.cinfo-icon iframe {
+  width: 80px;
+  height: 80px;
+  margin: -12px;
+  border: none;
+  pointer-events: none;
+}
+.cinfo-label {
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #a5c0ff;
+  font-weight: 600;
+}
+.cinfo-value {
+  font-size: 15px;
+  color: white;
+  line-height: 1.6;
+  font-weight: 400;
+}
+.cinfo-value strong { display: block; font-weight: 600; }
+.cinfo-hours {
+  max-width: 1000px;
+  margin: 20px auto 0;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 20px;
+  padding: 40px 50px 36px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 40px;
+  align-items: center;
+}
+.cinfo-hours-icon {
+  width: 56px; height: 46px;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.12);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px;
+  grid-row: 1 / 3;
+}
+.cinfo-hours-label {
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #a5c0ff;
+  font-weight: 600;
+  align-self: end;
+}
+.cinfo-hours-slots {
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
+  align-self: start;
+}
+.cinfo-slot { font-size: 14px; color: rgba(255,255,255,0.75); line-height: 1.7; }
+.cinfo-slot span { color: #4ade80; font-weight: 600; display: block; }
+@media (max-width: 900px) {
+  .cinfo-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 560px) {
+  .cinfo-grid { grid-template-columns: 1fr; }
+  .contact-top-title { font-size: 28px; }
+  .cinfo-hours { grid-template-columns: 1fr; padding: 24px 20px; }
+  .cinfo-hours-icon { grid-row: auto; }
+  .cinfo-hours-slots { gap: 16px; }
+}
+</style>
+</style>
+<!-- ===== END AI CHAT BUTTON CSS ===== -->
+
+</head>
+<body>
+
+<!-- ── NAVBAR ── -->
+<nav class="navbar-custom">
+  <div class="left">
+    <img src="logo.jpg" class="logo" data-aos="fade-right" alt="Ek Noor Neki da Hospital Logo">
+    <div class="title" data-aos="fade-right" data-aos-delay="100">EK NOOR NEKI DA HOSPITAL</div>
+  </div>
+  <button class="menu-toggle" type="button" onclick="toggleMenu()">☰</button>
+  <ul class="menu" id="mainMenu">
+    <li><a href="home (1).html"class="active">Home</a></li>
+    <li><a href="doctors.html">Doctor</a></li>
+    <li><a href="patient.html">Patient</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li><a href="contact (5).html">Contact</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="videos.html">Videos</a></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ── -->
+<div class="intro" data-aos="fade-in">
+  <video autoplay muted loop playsinline class="bg-video">
+    <source src="gif.mp4" type="video/mp4">
+  </video>
+  <div class="overlay"></div>
+
+  <h1 class="animate__animated animate__fadeInDown">WELCOME!</h1>
+  <!-- FIX 11: span updated by JS typewriter instead of unreliable CSS content animation -->
+  <h3>DO COME &amp; <span class="change_content" id="heroText"></span></h3>
+
+  <button class="btn btn-light mt-3 px-4 py-2 rounded-pill fw-500"
+          data-bs-toggle="collapse" data-bs-target="#demo">
+    Learn More ↓
+  </button>
+
+  <div id="demo" class="collapse hero-collapse">
+    Nekida Charitable Hospital stands as a testament to the belief that healthcare is a fundamental right, not a privilege. Rooted in compassion and driven by a mission to serve, our hospital is dedicated to providing quality medical care to all, irrespective of financial constraints.
+  </div>
+</div>
+
+<!-- ── FOR VISITORS ── -->
+<div class="section-label" data-aos="fade-up">Our Services</div>
+<div class="container" style="max-width:960px; margin-bottom: 60px;">
+  <p class="text-center" style="color:#6b7a99; font-size:15px; margin-bottom:36px;" data-aos="fade-up">Everything you need, available around the clock.</p>
+
+  <div class="row g-4">
+
+    <!-- Appointment -->
+    <div class="col-md-4" data-aos="fade-up">
+      <div class="vcard">
+        <div class="vcard-icon">
+          <svg viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 6h-4V4c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v17c0 .55.45 1 1 1h18c.55 0 1-.45 1-1V8c0-1.1-.9-2-2-2m0 14h-9v-5H7v5H4V4h10v3c0 .55.45 1 1 1h5z"/>
+            <path d="M16 10h2v2h-2zm0 4h2v2h-2zm-6-8H8v2H6v2h2v2h2v-2h2V8h-2z"/>
+          </svg>
+        </div>
+        <h4 class="vcard-title">Appointment</h4>
+        <p class="vcard-desc">Book easily with 14+ doctors across all departments. Fast, simple, hassle-free.</p>
+        <!-- FIX 7: Reset modal state before showing -->
+        <button class="vcard-btn" onclick="openModal()">Book now →</button>
+      </div>
+    </div>
+
+    <!-- Emergency -->
+    <div class="col-md-4" data-aos="fade-up" data-aos-delay="150">
+      <div class="vcard vcard-accent">
+        <div class="vcard-icon">
+          <svg viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+            <path d="M19.1 7.8c-.38-.5-.97-.8-1.6-.8H15V6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2 0 1.65 1.35 3 3 3s3-1.35 3-3h4c0 1.65 1.35 3 3 3s3-1.35 3-3c1.1 0 2-.9 2-2v-3.67c0-.43-.14-.86-.4-1.2zM17.5 9l1.5 2h-4V9zM7 19a1.003 1.003 0 0 1-.87-1.5c.37-.63 1.36-.63 1.73 0 .09.15.13.32.13.49 0 .55-.45 1-1 1zm10 0a1.003 1.003 0 0 1-.87-1.5c.37-.63 1.36-.63 1.73 0 .09.15.13.32.13.49 0 .55-.45 1-1 1z"/>
+            <path d="M9.5 7h-2v2.5H5v2h2.5V14h2v-2.5H12v-2H9.5z"/>
+          </svg>
+        </div>
+        <h4 class="vcard-title">Emergency</h4>
+        <p class="vcard-desc"><span class="pulse-dot"></span>Ambulance services available 24/7 — call anytime, day or night.</p>
+        <a href="https://wa.me/919876413100" class="vcard-btn">Call now →</a>
+      </div>
+    </div>
+
+    <!-- 24/7 Facility -->
+    <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
+      <div class="vcard vcard-accent2">
+        <div class="vcard-icon">
+          <svg viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+            <path d="M21 7.99h-5V3c0-.55-.45-1-1-1H9c-.55 0-1 .45-1 1v4.99H3c-.55 0-1 .45-1 1v6c0 .55.45 1 1 1h5V21c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-5.01h5c.55 0 1-.45 1-1v-6c0-.55-.45-1-1-1m-1 6h-5c-.55 0-1 .45-1 1V20h-4v-5.01c0-.55-.45-1-1-1H4v-4h5c.55 0 1-.45 1-1V4h4v4.99c0 .55.45 1 1 1h5z"/>
+          </svg>
+        </div>
+        <h4 class="vcard-title">24/7 Facility</h4>
+        <p class="vcard-desc">Immediate treatment anytime, day or night, rain or shine. Always here for you.</p>
+        <a href="https://www.google.com/maps/place/Ek+Noor+Neki+da+Hospital/@30.8145395,75.8647397,17z" class="vcard-btn">Visit now →</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ── APPOINTMENT MODAL ── -->
+<div id="id01" class="modal">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeModal()">&times;</button>
+
+    <div id="formView">
+      <div class="modal-header">
+        <div class="badge">Schedule a Visit</div>
+        <h2>Book Appointment</h2>
+      </div>
+
+      <form id="appointmentForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" name="full_name" placeholder="e.g. Rajveer Singh" required/>
+          </div>
+          <div class="form-group">
+            <label>Phone Number</label>
+            <!-- FIX 4: Added pattern, inputmode for numeric enforcement -->
+            <input type="tel" name="phone" id="phoneInput"
+                   placeholder="10-digit number"
+                   required
+                   maxlength="10"
+                   pattern="[0-9]{10}"
+                   inputmode="numeric"
+                   title="Please enter a valid 10-digit phone number"/>
+            <!-- FIX 13: Format hint below field -->
+            <div class="field-hint">Digits only, no spaces or dashes</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Email <span class="optional-tag">optional</span></label>
+          <input type="email" name="email" placeholder="you@example.com"/>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Department</label>
+            <!-- FIX 9: Added name attributes to both selects -->
+            <select name="department" required>
+              <option value="">Choose Department</option>
+              <option>Cardiology</option>
+              <option>Orthopedic</option>
+              <option>Neurology</option>
+              <option>Pediatrics</option>
+              <option>General Surgery</option>
+              <option>OB-GYN</option>
+              <option>Urology</option>
+              <option>Ophthalmology</option>
+              <option>Neurosurgery</option>
+              <option>Psychiatry</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Preferred Doctor</label>
+            <!-- FIX 9: Added name attribute -->
+            <select name="doctor">
+              <option value="">Any Doctor</option>
+              <option>Dr. Sharma</option>
+              <option>Dr. Singh</option>
+              <option>Dr. Kaur</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Preferred Date</label>
+          <!-- FIX 3: min date set via JS on page load -->
+          <input type="date" name="date" id="dateInput" required/>
+        </div>
+
+        <div class="form-actions">
+          <!-- FIX 10: id added so JS can disable/re-enable it -->
+          <button type="submit" class="btn-submit" id="submitBtn">Confirm Booking</button>
+          <button type="button" class="btn-cancel" onclick="closeModal()">Cancel</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="success-msg" id="successMsg">
+      <div class="checkmark">✅</div>
+      <h3>Appointment Booked!</h3>
+      <p>Thank you! We'll confirm your appointment shortly via phone or email.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── DEPARTMENTS ── -->
+<div class="container py-4" style="max-width:1100px;" data-aos="fade-up">
+  <div class="section-title-blue">Specialisations</div>
+  <h2 class="section-title">Our Departments</h2>
+
+  <div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-3">
+    <div class="col"><div class="card deppt-card h-100">
+      <div class="card-header">General Surgeons</div>
+      <!-- FIX 12: Descriptive alt text on all department images -->
+      <div class="card-body d-flex justify-content-center"><img src="surgery.png" alt="Icon representing the General Surgery department"></div>
+      <div class="card-footer">Advanced surgical care with precision.</div>
+    </div></div>
+
+    <div class="col"><div class="card deppt-card h-100">
+      <div class="card-header">Physicians</div>
+      <div class="card-body d-flex justify-content-center"><img src="physician-helthcare.png" alt="Icon representing the Physicians department"></div>
+      <div class="card-footer">Expert diagnosis & complete healthcare.</div>
+    </div></div>
+
+    <div class="col"><div class="card deppt-card h-100">
+      <div class="card-header">OB-GYN</div>
+      <div class="card-body d-flex justify-content-center"><img src="gynecologist.png" alt="Icon representing the OB-GYN department"></div>
+      <div class="card-footer">Women's health & maternity care.</div>
+    </div></div>
+
+    <div class="col"><div class="card deppt-card h-100">
+      <div class="card-header">Urologist</div>
+      <div class="card-body d-flex justify-content-center"><img src="urologist.png" alt="Icon representing the Urology department"></div>
+      <div class="card-footer">Kidney & urinary treatment experts.</div>
+    </div></div>
+
+    <div class="col"><div class="card deppt-card h-100">
+      <div class="card-header">Pediatrics</div>
+      <div class="card-body d-flex justify-content-center"><img src="pediatrics.png" alt="Icon representing the Pediatrics department"></div>
+      <div class="card-footer">Child healthcare specialists.</div>
+    </div></div>
+
+    <div class="col"><div class="card deppt-card h-100">
+      <div class="card-header">Ophthalmologist</div>
+      <div class="card-body d-flex justify-content-center"><img src="vision-care.png" alt="Icon representing the Ophthalmology department"></div>
+      <div class="card-footer">Eye care & vision treatment.</div>
+    </div></div>
+
+    <div class="col"><div class="card deppt-card h-100">
+      <div class="card-header">Orthopedics</div>
+      <div class="card-body d-flex justify-content-center"><img src="orthopedics.png" alt="Icon representing the Orthopedics department"></div>
+      <div class="card-footer">Bone & joint care specialists.</div>
+    </div></div>
+
+    <div class="col"><div class="card deppt-card h-100">
+      <div class="card-header">Neurosurgeons</div>
+      <div class="card-body d-flex justify-content-center"><img src="neurosurgeon.png" alt="Icon representing the Neurosurgery department"></div>
+      <div class="card-footer">Brain and Spine Surgery Unit.</div>
+    </div></div>
+
+    <div class="col"><div class="card deppt-card h-100">
+      <div class="card-header">Psychiatrist</div>
+      <div class="card-body d-flex justify-content-center"><img src="question (1).png" alt="Icon representing the Psychiatry department"></div>
+      <div class="card-footer">Mental Health Unit.</div>
+    </div></div>
+  </div>
+</div>
+
+<!-- ── SERVICES ── -->
+<div class="container py-5" style="max-width:1000px;">
+  <div class="section-title-blue" data-aos="fade-up">What We Offer</div>
+  <h2 class="section-title" data-aos="fade-up">Our Services</h2>
+
+  <div class="row g-4">
+    <div class="col-md-4" data-aos="fade-up">
+      <div class="card service-card h-100">
+        <div class="card-body">
+          <div style="font-size:28px; margin-bottom:12px;">🏥</div>
+          <h4>Accessible Health For All</h4>
+          <p style="font-size:14px; color:#6b7a99;">At Nekida, we believe health knows no economic boundaries.</p>
+          <button class="btn btn-primary mt-3 rounded-pill px-4" style="font-size:13px;"
+                  data-bs-toggle="collapse" data-bs-target="#service1">
+            Read more →
+          </button>
+          <div id="service1" class="collapse service-collapse">
+            Every member of our community deserves access to quality care, irrespective of financial constraints. Our charitable model ensures no one is turned away.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4" data-aos="fade-up" data-aos-delay="150">
+      <div class="card service-card h-100">
+        <div class="card-body">
+          <div style="font-size:28px; margin-bottom:12px;">💙</div>
+          <h4>Compassion in Action</h4>
+          <p style="font-size:14px; color:#6b7a99;">Our commitment to compassion extends to every aspect of care.</p>
+          <button class="btn btn-primary mt-3 rounded-pill px-4" style="font-size:13px;"
+                  data-bs-toggle="collapse" data-bs-target="#service2">
+            Read more →
+          </button>
+          <div id="service2" class="collapse service-collapse">
+            We provide not just treatment, but genuine human care — treating every patient with dignity, empathy, and respect throughout their healing journey.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
+      <div class="card service-card h-100">
+        <div class="card-body">
+          <div style="font-size:28px; margin-bottom:12px;">🤝</div>
+          <h4>Philanthropy in Practice</h4>
+          <p style="font-size:14px; color:#6b7a99;">Through philanthropic support, we expand our reach to help more.</p>
+          <button class="btn btn-primary mt-3 rounded-pill px-4" style="font-size:13px;"
+                  data-bs-toggle="collapse" data-bs-target="#service3">
+            Read more →
+          </button>
+          <div id="service3" class="collapse service-collapse">
+            We partner with donors and NGOs to fund essential healthcare services for those who need it most — because good health is a shared responsibility.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<section class="contact-section">
+
+  <div class="contact-top" data-aos="fade-up">
+    <div class="contact-top-label">Reach Out</div>
+    <h2 class="contact-top-title">Get In Touch</h2>
+    <p class="contact-top-sub">We're always here to help — whether you have a question, need a visit, or require immediate assistance.</p>
+  </div>
+
+  <div class="cinfo-grid">
+
+    <a class="cinfo-card" href="https://www.google.com/maps/place/Ek+Noor+Neki+da+Hospital/@30.8145395,75.8647397,17z" target="_blank" data-aos="fade-up">
+      <div class="cinfo-icon"><iframe src="https://lottie.host/embed/42de490e-d094-409a-874d-bb796ecfb749/tR2O5tKCXu.lottie"></iframe></div>
+      <div class="cinfo-label">Location</div>
+      <div class="cinfo-value">Gurudwara Alamgir Sahib,<br>Malerkotla Road,<br>Ludhiana, Punjab</div>
+    </a>
+
+    <a class="cinfo-card" href="https://wa.me/919876413100" target="_blank" data-aos="fade-up" data-aos-delay="80">
+      <div class="cinfo-icon"><iframe src="https://lottie.host/embed/32c3c588-0b9a-41cc-a0a7-162c983e8ba7/fMRNQILXPe.lottie"></iframe></div>
+      <div class="cinfo-label">Call / WhatsApp</div>
+      <div class="cinfo-value"><strong>+91 98764 13100</strong>Available 24 / 7 for emergencies</div>
+    </a>
+
+    <a class="cinfo-card" href="https://mail.google.com/mail/u/0/#search/eknoorsewakendra%40yahoo.com" data-aos="fade-up" data-aos-delay="160">
+      <div class="cinfo-icon"><iframe src="https://lottie.host/embed/8582bd4d-1665-433e-96fe-e1c6ace7d817/DpcaMuJtmA.lottie"></iframe></div>
+      <div class="cinfo-label">Email Us</div>
+      <div class="cinfo-value">eknoorsewakendra<br>@yahoo.com</div>
+    </a>
+
+    <div class="cinfo-card" style="cursor:default;" data-aos="fade-up" data-aos-delay="240">
+      <div class="cinfo-icon"><iframe src="https://lottie.host/embed/7c0c81f2-db38-4f3f-a47e-66c3e3ca8f9c/cVr4BwhIiS.lottie"></iframe></div>
+      <div class="cinfo-label">Emergency</div>
+      <div class="cinfo-value"><strong style="color:#4ade80;">Always Open</strong>Ambulance dispatch round the clock</div>
+    </div>
+
+  </div>
+
+  <div class="cinfo-hours" data-aos="fade-up" data-aos-delay="100">
+    <div class="cinfo-hours-icon"><iframe src="https://lottie.host/embed/39a2cf3a-9f61-41b7-9de2-d1659f33caaf/ABAU8DreqA.lottie"></iframe></div>
+    <div class="cinfo-hours-label">Working Hours</div>
+    <div class="cinfo-hours-slots">
+      <div class="cinfo-slot">Monday &ndash; Saturday<span>8:00 AM &ndash; 8:00 PM</span></div>
+      <div class="cinfo-slot">Sunday<span>9:00 AM &ndash; 2:00 PM</span></div>
+      <div class="cinfo-slot">Emergency &amp; OPD<span>24 / 7 &mdash; Always open</span></div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ── FOOTER ── -->
+<footer data-aos="fade-up" class="hospital-footer">
+  <div class="footer-container">
+    <div class="footer-box">
+      <h3>Ek Noor Neki da Charitable Hospital</h3>
+      <p>Dedicated to compassionate healthcare and community service. We strive to provide affordable and quality medical care with dignity and respect for all.</p>
+    </div>
+    <div class="footer-box">
+      <h4>Contact Information</h4>
+      <ul>
+        <li>
+          <strong style="color:#cdd5e8;">Address:</strong><br>
+          <a href="https://www.google.com/maps/place/Ek+Noor+Neki+da+Hospital/@30.8145395,75.8647397,17z">
+            Gurudwara Alamgir Sahib,<br>Malerkotla Road, Ludhiana, Punjab
+          </a>
+        </li>
+        <li><strong style="color:#cdd5e8;">Phone:</strong> <a href="https://wa.me/919876413100">098764 13100</a></li>
+        <li><strong style="color:#cdd5e8;">Email:</strong> <a href="https://mail.google.com/mail/u/0/#search/eknoorsewakendra%40yahoo.com"><span class="__cf_email__" data-cfemail="e98c828786869b9a8c9e88828c878d9b88a99088818686c78a8684">[email&#160;protected]</span></a></li>
+      </ul>
+    </div>
+    <div class="footer-box">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="#">Our Doctors</a></li>
+        <li><a href="patient.html">Patient Portal</a></li>
+        <li><a href="#">Departments</a></li>
+        <li><a href="contact (5).html">Contact Us</a></li>
+        <li><a href="#">About Us</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    © 2026 Ek Noor Neki da Charitable Hospital. All Rights Reserved.
+  </div>
+</footer>
+
+<!-- Floating Button -->
+<div id="ai-float-btn" onclick="openAIChatModal()">
+  <div id="ai-float-bubble">Happy to Assist! 🤖</div>
+  <div id="ai-float-circle">
+    <svg viewBox="0 0 24 24">
+      <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/>
+    </svg>
+  </div>
+</div>
+
+<!-- Modal -->
+<div id="ai-modal-overlay" onclick="closeAIChatModal(event)">
+  <div id="ai-modal-box">
+    <button id="ai-close-btn" onclick="forceCloseAIChat()">✕</button>
+    <iframe src="assistant.html" id="ai-iframe"></iframe>
+  </div>
+</div>
+
+<!-- ── SCRIPTS ── -->
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  AOS.init({ duration: 900, once: true, offset: 80 });
+  // Mobile menu
+  function toggleMenu() {
+    document.getElementById("mainMenu").classList.toggle("active");
+  }
+  document.addEventListener("click", function(e) {
+    if (!e.target.closest(".navbar-custom")) {
+      document.getElementById("mainMenu").classList.remove("active");
+    }
+  });
+
+  document.getElementById('dateInput').min = new Date().toISOString().split('T')[0];
+
+  (function() {
+    const words = ['CARE FOR LIFE', 'HEAL WITH HOPE', 'TRUST OUR CARE', 'EMBRACE BETTER HEALTH', 'LIVE HEALTHIER', 'WE WILL TAKE CARE OF YOU', 'FEEL BETTER'];
+    const el = document.getElementById('heroText');
+    let i = 0;
+    el.textContent = words[0];
+    setInterval(function() {
+      el.classList.add('fade');
+      setTimeout(function() {
+        i = (i + 1) % words.length;
+        el.textContent = words[i];
+        el.classList.remove('fade');
+      }, 400);
+    }, 3000);
+  })();
+
+  document.getElementById('phoneInput').addEventListener('input', function() {
+    this.value = this.value.replace(/\D/g, '').slice(0, 10);
+  });
+
+  /* ── FIX 7: Modal open — always reset to clean form state ── */
+  function openModal() {
+    document.getElementById('formView').style.display  = 'block';
+    document.getElementById('successMsg').style.display = 'none';
+    document.getElementById('id01').style.display = 'block';
+    /* FIX 6: Prevent body scroll when modal is open */
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    document.getElementById('id01').style.display = 'none';
+    /* FIX 6: Restore body scroll */
+    document.body.style.overflow = '';
+  }
+
+  /* ── FIX 4 (mobile menu) + FIX 8: Use addEventListener, not window.onclick ── */
+  function toggleMenu() {
+    document.getElementById('mainMenu').classList.toggle('active');
+  }
+
+  /* FIX 5: Close mobile menu when clicking outside */
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.navbar-custom')) {
+      document.getElementById('mainMenu').classList.remove('active');
+    }
+  });
+
+  /* FIX 8: Use addEventListener so Bootstrap listeners are not overwritten */
+  window.addEventListener('click', function(e) {
+    if (e.target === document.getElementById('id01')) closeModal();
+  });
+
+  /* ── APPOINTMENT FORM SUBMISSION ── */
+  document.getElementById('appointmentForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const full_name  = this.elements['full_name'].value.trim();
+    const phone      = this.elements['phone'].value.trim();
+    const email      = this.elements['email'].value.trim();
+    const department = this.elements['department'].value;
+    const doctor     = this.elements['doctor'].value;
+    const date       = this.elements['date'].value;
+
+    if (!full_name || !phone || !department || !date) {
+      alert('Please fill all required fields.');
+      return;
+    }
+
+    /* FIX 4: Double-check phone is 10 digits */
+    if (!/^[0-9]{10}$/.test(phone)) {
+      alert('Please enter a valid 10-digit phone number.');
+      return;
+    }
+
+    const data = { full_name, phone, email, department, doctor, date };
+
+    /* FIX 10: Show loading state on submit button */
+    const submitBtn = document.getElementById('submitBtn');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Booking...';
+
+    try {
+      /* FIX 1: Relative URL — replace with your deployed backend endpoint */
+      const response = await fetch('/appointments', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        document.getElementById('formView').style.display  = 'none';
+        document.getElementById('successMsg').style.display = 'block';
+        this.reset();
+
+        setTimeout(function() {
+          closeModal(); 
+          document.getElementById('formView').style.display  = 'block';
+          document.getElementById('successMsg').style.display = 'none';
+        }, 3500);
+
+      } else {
+        alert('Error: ' + (result.error || 'Unknown error occurred.'));
+      } 
+    } catch (error) {
+      alert('Network error: ' + error.message);
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Confirm Booking';
+    }   
+  });
+</script>
+<script>
+  function openAIChatModal() {
+    document.getElementById('ai-modal-overlay').classList.add('ai-active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeAIChatModal(e) {
+    if (e.target === document.getElementById('ai-modal-overlay')) {
+      forceCloseAIChat();
+    }
+  }
+
+  function forceCloseAIChat() {
+    document.getElementById('ai-modal-overlay').classList.remove('ai-active');
+    document.body.style.overflow = '';
+  }
+
+  // Make sure button is always visible
+  window.addEventListener('load', function() {
+    var btn = document.getElementById('ai-float-btn');
+    if (btn) {
+      btn.style.cssText = 'position:fixed!important;bottom:30px!important;right:30px!important;z-index:999999!important;display:flex!important;flex-direction:column!important;align-items:center!important;gap:8px!important;cursor:pointer!important;';
+    }
+  });
+</script>
+</body>
+</html>

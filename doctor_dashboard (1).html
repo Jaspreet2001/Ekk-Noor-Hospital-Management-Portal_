@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Doctor Dashboard | Ek Noor Neki Da Hospital</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── LIGHT THEME ── */
+    :root {
+      --navy:#0d1f5c; --blue:#1a3bb5; --accent:#4f8ef7; --sky:#e8f0fe;
+      --green:#22c55e; --red:#ef4444; --amber:#f59e0b; --purple:#8b5cf6;
+      --shadow:0 8px 32px rgba(13,31,92,.12); --card-r:18px;
+      --bg:#f0f4ff;
+      --card-bg:#fff;
+      --topbar-bg:#fff;
+      --topbar-shadow:0 2px 12px rgba(13,31,92,.07);
+      --text:#0d1f5c;
+      --subtext:#8892b0;
+      --border:#f0f4ff;
+      --table-head:#f8faff;
+      --row-hover:#f8faff;
+      --input-bg:#f8faff;
+      --input-border:#dde4f5;
+      --stab-bg:#f0f4ff;
+      --stab-color:#8892b0;
+      --notes-bg:#f8faff;
+    }
+
+    /* ── DARK THEME ── */
+    body.dark {
+      --bg:#0e1117;
+      --card-bg:#1a1f2e;
+      --topbar-bg:#141824;
+      --topbar-shadow:0 2px 14px rgba(0,0,0,.5);
+      --shadow:0 8px 32px rgba(0,0,0,.4);
+      --text:#e2e8f0;
+      --subtext:#64748b;
+      --border:#1e2640;
+      --table-head:#141824;
+      --row-hover:#1e2640;
+      --input-bg:#141824;
+      --input-border:#2a3250;
+      --stab-bg:#141824;
+      --stab-color:#64748b;
+      --notes-bg:#141824;
+    }
+
+    body { font-family:'DM Sans',sans-serif; background:var(--bg); min-height:100vh; display:flex; transition:background .25s,color .25s; }
+
+    /* ── SIDEBAR ── */
+    .sidebar { width:248px; background:linear-gradient(175deg,#0a1a4e 0%,#0d1f5c 60%,#162d8a 100%); min-height:100vh; position:fixed; left:0; top:0; display:flex; flex-direction:column; z-index:200; transition:transform .3s; }
+    .sb-logo { padding:28px 22px 18px; border-bottom:1px solid rgba(255,255,255,.08); }
+    .sb-logo img { width:40px; height:40px; border-radius:50%; border:2px solid rgba(255,255,255,.25); margin-bottom:10px; object-fit:cover; }
+    .sb-logo h2 { font-family:'Playfair Display',serif; font-size:13.5px; color:#fff; line-height:1.4; }
+    .sb-logo p  { font-size:10.5px; color:rgba(255,255,255,.4); margin-top:3px; }
+    .doc-badge  { margin:14px 14px 8px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1); border-radius:12px; padding:14px; }
+    .doc-avatar { width:44px; height:44px; background:linear-gradient(135deg,#4f8ef7,#1a3bb5); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:20px; margin-bottom:8px; }
+    .doc-name   { font-size:14px; font-weight:600; color:#fff; }
+    .doc-role   { font-size:11px; color:rgba(255,255,255,.45); margin-top:2px; }
+    .doc-pill   { display:inline-flex; align-items:center; gap:5px; background:rgba(79,142,247,.2); color:#93c5fd; border-radius:20px; font-size:10px; padding:3px 8px; margin-top:8px; }
+    .pulse { width:7px; height:7px; border-radius:50%; background:#4f8ef7; animation:pulse 2s infinite; flex-shrink:0; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.82)} }
+    nav { flex:1; padding:6px 0; }
+    .nav-lbl  { font-size:10px; letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,.28); padding:14px 20px 5px; }
+    .nav-item { display:flex; align-items:center; gap:11px; padding:10px 20px; cursor:pointer; color:rgba(255,255,255,.58); font-size:13.5px; text-decoration:none; transition:all .2s; border-left:3px solid transparent; }
+    .nav-item:hover  { background:rgba(255,255,255,.07); color:#fff; }
+    .nav-item.active { background:rgba(255,255,255,.1); color:#fff; font-weight:600; border-left-color:#4f8ef7; }
+    .nav-item .ico   { font-size:17px; width:20px; text-align:center; }
+    .sb-foot  { padding:14px; border-top:1px solid rgba(255,255,255,.08); }
+    .logout-btn { width:100%; padding:9px; background:rgba(239,68,68,.15); color:#fca5a5; border:1px solid rgba(239,68,68,.25); border-radius:10px; font-size:13px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif; }
+    .logout-btn:hover { background:rgba(239,68,68,.28); color:#fff; }
+
+    /* ── MAIN ── */
+    .main { margin-left:248px; flex:1; min-width:0; }
+    .topbar { background:var(--topbar-bg); padding:15px 30px; display:flex; align-items:center; justify-content:space-between; box-shadow:var(--topbar-shadow); position:sticky; top:0; z-index:100; transition:background .25s; }
+    .topbar-title { font-family:'Playfair Display',serif; font-size:19px; color:var(--text); font-weight:700; }
+    .topbar-sub   { font-size:12px; color:var(--subtext); margin-top:2px; }
+    .topbar-right { display:flex; align-items:center; gap:12px; }
+    .doc-chip  { background:linear-gradient(135deg,#4f8ef7,var(--blue)); color:#fff; font-size:11px; font-weight:700; padding:6px 14px; border-radius:20px; letter-spacing:1px; }
+    .date-chip { background:var(--sky); color:var(--navy); font-size:12px; font-weight:600; padding:7px 14px; border-radius:10px; }
+    .mob-btn   { display:none; background:none; border:none; font-size:22px; cursor:pointer; color:var(--text); }
+
+    /* ── DARK TOGGLE ── */
+    .dark-toggle { width:38px; height:38px; border-radius:10px; border:1.5px solid var(--input-border); background:var(--input-bg); cursor:pointer; font-size:17px; display:flex; align-items:center; justify-content:center; transition:all .2s; }
+    .dark-toggle:hover { background:var(--sky); border-color:var(--accent); }
+
+    .content { padding:24px 28px; }
+
+    /* ── TODAY STRIP ── */
+    .today-strip { background:linear-gradient(135deg,#0d1f5c,#1a3bb5); border-radius:var(--card-r); padding:20px 24px; margin-bottom:22px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:14px; }
+    .today-strip h3 { font-family:'Playfair Display',serif; font-size:17px; color:#fff; }
+    .today-strip p  { font-size:12px; color:rgba(255,255,255,.62); margin-top:3px; }
+    .today-badges { display:flex; gap:10px; flex-wrap:wrap; }
+    .t-badge { background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.18); border-radius:11px; padding:10px 16px; text-align:center; }
+    .t-badge-val { font-size:24px; font-weight:700; color:#fff; font-family:'Playfair Display',serif; }
+    .t-badge-lbl { font-size:10px; color:rgba(255,255,255,.62); text-transform:uppercase; letter-spacing:1px; margin-top:2px; }
+
+    /* ── STATS ── */
+    .stats-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(175px,1fr)); gap:15px; margin-bottom:24px; }
+    .stat-card  { background:var(--card-bg); border-radius:var(--card-r); padding:20px 22px; box-shadow:var(--shadow); position:relative; overflow:hidden; transition:background .25s; }
+    .stat-card::after { content:''; position:absolute; width:90px; height:90px; border-radius:50%; right:-22px; top:-22px; opacity:.08; }
+    .c-blue::after{background:var(--blue)}.c-green::after{background:var(--green)}.c-amber::after{background:var(--amber)}.c-red::after{background:var(--red)}.c-purple::after{background:var(--purple)}
+    .stat-ico { font-size:24px; margin-bottom:10px; }
+    .stat-lbl { font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:var(--subtext); font-weight:600; }
+    .stat-val { font-size:32px; font-weight:700; color:var(--text); font-family:'Playfair Display',serif; margin:3px 0; }
+    .stat-sub { font-size:12px; color:var(--subtext); }
+
+    /* ── CARD ── */
+    .card { background:var(--card-bg); border-radius:var(--card-r); box-shadow:var(--shadow); overflow:hidden; margin-bottom:22px; transition:background .25s; }
+    .card-head { padding:17px 22px 13px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; }
+    .card-head h3 { font-family:'Playfair Display',serif; font-size:17px; color:var(--text); font-weight:700; }
+
+    /* ── FILTER ── */
+    .filter-row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+    .f-input,.f-select { padding:8px 13px; border:1.5px solid var(--input-border); border-radius:9px; font-family:'DM Sans',sans-serif; font-size:13px; color:var(--text); background:var(--input-bg); outline:none; transition:all .2s; }
+    .f-input:focus,.f-select:focus { border-color:var(--accent); }
+    .f-input { width:175px; }
+    .btn-sm  { padding:8px 15px; border:none; border-radius:9px; font-family:'DM Sans',sans-serif; font-size:13px; font-weight:600; cursor:pointer; transition:all .2s; }
+    .btn-sky { background:var(--sky); color:var(--navy); } .btn-sky:hover { background:#d1e3fe; }
+
+    /* ── TABS ── */
+    .stabs { display:flex; gap:6px; padding:12px 20px; border-bottom:1px solid var(--border); flex-wrap:wrap; }
+    .stab  { padding:6px 14px; border-radius:20px; font-size:12px; font-weight:600; cursor:pointer; border:2px solid transparent; background:var(--stab-bg); color:var(--stab-color); transition:all .2s; }
+    .stab:hover { background:var(--sky); color:var(--navy); }
+    .stab.active-tab { background:var(--navy); color:#fff; }
+
+    /* ── TABLE ── */
+    .tbl-wrap { overflow-x:auto; }
+    table { width:100%; border-collapse:collapse; min-width:680px; }
+    thead th { padding:11px 14px; text-align:left; font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:var(--subtext); font-weight:600; background:var(--table-head); border-bottom:1px solid var(--border); white-space:nowrap; }
+    tbody td { padding:12px 14px; font-size:13px; color:var(--text); border-bottom:1px solid var(--border); vertical-align:middle; }
+    tbody tr:hover { background:var(--row-hover); }
+    tbody tr:last-child td { border-bottom:none; }
+
+    /* ── BADGES ── */
+    .sb { display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:700; padding:4px 12px; border-radius:20px; white-space:nowrap; }
+    .sb-pending  { background:#fef9c3; color:#92400e; }
+    .sb-accepted { background:#dcfce7; color:#166534; }
+    .sb-rejected { background:#fee2e2; color:#991b1b; }
+    .sdot { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
+    .sdot-p{background:var(--amber)}.sdot-a{background:var(--green);animation:dp 1.5s infinite}.sdot-r{background:var(--red)}
+    @keyframes dp{0%,100%{opacity:1}50%{opacity:.4}}
+
+    /* ── BUTTONS ── */
+    .acts { display:flex; gap:5px; flex-wrap:nowrap; }
+    .btn-acc { padding:5px 11px; background:#dcfce7; color:#166534; border:1.5px solid #86efac; border-radius:7px; font-size:11px; font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .2s; }
+    .btn-acc:hover { background:#bbf7d0; }
+    .btn-rej { padding:5px 11px; background:#fee2e2; color:#991b1b; border:1.5px solid #fca5a5; border-radius:7px; font-size:11px; font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .2s; }
+    .btn-rej:hover { background:#fecaca; }
+    .btn-rst { padding:5px 9px; background:var(--stab-bg); color:var(--subtext); border:1.5px solid var(--input-border); border-radius:7px; font-size:11px; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .2s; }
+    .btn-rst:hover { background:var(--sky); color:var(--navy); }
+
+    /* ── MODAL ── */
+    .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:500; align-items:center; justify-content:center; }
+    .modal-overlay.open { display:flex; }
+    .modal-box { background:var(--card-bg); border-radius:16px; padding:26px; width:90%; max-width:420px; box-shadow:0 24px 64px rgba(0,0,0,.25); }
+    .modal-box h3 { font-family:'Playfair Display',serif; font-size:17px; color:var(--text); margin-bottom:6px; }
+    .modal-box p  { font-size:13px; color:var(--subtext); margin-bottom:12px; }
+    .modal-box textarea { width:100%; padding:10px 13px; border:1.5px solid var(--input-border); border-radius:9px; font-family:'DM Sans',sans-serif; font-size:13px; color:var(--text); background:var(--input-bg); resize:vertical; min-height:90px; outline:none; }
+    .modal-box textarea:focus { border-color:var(--accent); }
+    .modal-acts { display:flex; gap:9px; margin-top:14px; }
+    .btn-cancel { flex:1; padding:9px; background:var(--stab-bg); color:var(--subtext); border:1.5px solid var(--input-border); border-radius:9px; font-size:13px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif; }
+    .btn-reject-confirm { flex:1; padding:9px; background:#ef4444; color:#fff; border:none; border-radius:9px; font-size:13px; font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif; }
+
+    /* ── NOTES ── */
+    .notes-box { background:var(--notes-bg); border:1.5px solid var(--input-border); border-radius:12px; padding:16px 18px; }
+    .notes-box textarea { width:100%; border:none; background:transparent; font-family:'DM Sans',sans-serif; font-size:13px; color:var(--text); resize:vertical; min-height:130px; outline:none; }
+    .notes-save { margin-top:10px; padding:8px 20px; background:var(--blue); color:#fff; border:none; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif; }
+    .notes-save:hover { background:var(--navy); }
+
+    /* ── TOAST ── */
+    .toast { position:fixed; bottom:24px; right:24px; background:var(--navy); color:#fff; padding:12px 20px; border-radius:10px; font-size:13px; font-weight:600; z-index:1000; opacity:0; transform:translateY(10px); transition:all .3s; pointer-events:none; box-shadow:0 8px 24px rgba(0,0,0,.22); }
+    .toast.show { opacity:1; transform:translateY(0); }
+    .toast.t-success { background:#166534; }
+    .toast.t-error   { background:#dc2626; }
+
+    /* ── SPINNER ── */
+    .spinner { width:28px; height:28px; border:3px solid var(--border); border-top-color:var(--accent); border-radius:50%; animation:spin .7s linear infinite; margin:0 auto; }
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* ── SECTIONS ── */
+    .section { display:none; }
+    .section.active { display:block; }
+
+    /* ── EMPTY ── */
+    .empty { text-align:center; padding:40px 20px; color:var(--subtext); }
+    .empty .ei { font-size:40px; margin-bottom:10px; }
+    .empty p { font-size:13px; }
+
+    @media(max-width:700px){
+      .sidebar{transform:translateX(-100%)}
+      .sidebar.open{transform:translateX(0)}
+      .main{margin-left:0}
+      .mob-btn{display:block}
+    }
+  </style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sb-logo">
+    <img src="logo.jpg" alt="Logo"/>
+    <h2>Ek Noor Neki Da Hospital</h2>
+    <p>Staff Portal</p>
+  </div>
+  <div class="doc-badge">
+    <div class="doc-avatar">🩺</div>
+    <div class="doc-name" id="docName">Doctor</div>
+    <div class="doc-role">Medical Staff</div>
+    <div class="doc-pill"><span class="pulse"></span> On Duty</div>
+  </div>
+  <nav>
+    <div class="nav-lbl">Overview</div>
+    <a class="nav-item active" onclick="showSec('overview')" id="nav-overview"><span class="ico">📊</span> Dashboard</a>
+    <div class="nav-lbl">Appointments</div>
+    <a class="nav-item" onclick="showSec('appointments')" id="nav-appointments"><span class="ico">📅</span> Appointments</a>
+    <a class="nav-item" onclick="showSec('today')" id="nav-today"><span class="ico">🌅</span> Today's Schedule</a>
+    <div class="nav-lbl">Patients</div>
+    <a class="nav-item" onclick="showSec('patients')" id="nav-patients"><span class="ico">🧑‍⚕️</span> Patient Records</a>
+    <div class="nav-lbl">Tools</div>
+    <a class="nav-item" onclick="showSec('notes')" id="nav-notes"><span class="ico">📝</span> My Notes</a>
+  </nav>
+  <div class="sb-foot">
+    <button class="logout-btn" onclick="doLogout()">🚪 Sign Out</button>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div>
+      <div class="topbar-title" id="pageTitle">Dashboard</div>
+      <div class="topbar-sub" id="pageSub">Welcome back, Doctor</div>
+    </div>
+    <div class="topbar-right">
+      <span class="doc-chip">🩺 DOCTOR</span>
+      <span class="date-chip" id="dateChip"></span>
+      <button class="dark-toggle" id="darkBtn" onclick="toggleDark()" title="Toggle dark mode">🌙</button>
+      <button class="mob-btn" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- OVERVIEW -->
+    <div class="section active" id="sec-overview">
+      <div class="today-strip">
+        <div>
+          <h3 id="greetName">Good day, Doctor 👋</h3>
+          <p id="todayDate">Today's appointments at a glance</p>
+        </div>
+        <div class="today-badges">
+          <div class="t-badge"><div class="t-badge-val" id="tToday">—</div><div class="t-badge-lbl">Today</div></div>
+          <div class="t-badge"><div class="t-badge-val" id="tPending">—</div><div class="t-badge-lbl">Pending</div></div>
+          <div class="t-badge"><div class="t-badge-val" id="tDone">—</div><div class="t-badge-lbl">Accepted</div></div>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card c-blue"><div class="stat-ico">📋</div><div class="stat-lbl">Total Appointments</div><div class="stat-val" id="sTotal">—</div><div class="stat-sub">All time</div></div>
+        <div class="stat-card c-amber"><div class="stat-ico">⏳</div><div class="stat-lbl">Pending Review</div><div class="stat-val" id="sPend">—</div><div class="stat-sub">Awaiting action</div></div>
+        <div class="stat-card c-green"><div class="stat-ico">✅</div><div class="stat-lbl">Accepted</div><div class="stat-val" id="sAcc">—</div><div class="stat-sub">Confirmed visits</div></div>
+        <div class="stat-card c-red"><div class="stat-ico">❌</div><div class="stat-lbl">Rejected</div><div class="stat-val" id="sRej">—</div><div class="stat-sub">Declined</div></div>
+        <div class="stat-card c-purple"><div class="stat-ico">🧑‍⚕️</div><div class="stat-lbl">Registered Patients</div><div class="stat-val" id="sPats">—</div><div class="stat-sub">In database</div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <h3>⏳ Pending Appointments</h3>
+          <button class="btn-sm btn-sky" onclick="loadOverview()">↻ Refresh</button>
+        </div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>#</th><th>Patient</th><th>Department</th><th>Doctor</th><th>Date</th><th>Action</th></tr></thead>
+            <tbody id="pendingBody"><tr><td colspan="6" style="text-align:center;padding:28px;"><div class="spinner"></div></td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- APPOINTMENTS -->
+    <div class="section" id="sec-appointments">
+      <div class="card">
+        <div class="card-head">
+          <h3>📅 All Appointments</h3>
+          <div class="filter-row">
+            <input class="f-input" id="apptSearch" placeholder="Search patient..." oninput="filterAppts()"/>
+            <select class="f-select" id="apptDept" onchange="filterAppts()">
+              <option value="">All Departments</option>
+              <option>General Surgery</option><option>Cardiology</option><option>Neurology</option>
+              <option>Pediatrics</option><option>Orthopedics</option><option>Urology</option>
+              <option>OB-GYN</option><option>Ophthalmology</option><option>Psychiatry</option>
+            </select>
+            <button class="btn-sm btn-sky" onclick="loadAppts()">↻ Refresh</button>
+          </div>
+        </div>
+        <div class="stabs">
+          <span class="stab active-tab" onclick="setTab('all',this)">All <span id="cAll"></span></span>
+          <span class="stab" onclick="setTab('pending',this)">Pending <span id="cPend"></span></span>
+          <span class="stab" onclick="setTab('accepted',this)">Accepted <span id="cAcc"></span></span>
+          <span class="stab" onclick="setTab('rejected',this)">Rejected <span id="cRej"></span></span>
+        </div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>ID</th><th>Patient</th><th>Phone</th><th>Department</th><th>Doctor</th><th>Date</th><th>Status</th><th>Action</th></tr></thead>
+            <tbody id="apptBody"><tr><td colspan="8" style="text-align:center;padding:28px;"><div class="spinner"></div></td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TODAY'S SCHEDULE -->
+    <div class="section" id="sec-today">
+      <div class="card">
+        <div class="card-head">
+          <h3>🌅 Today's Schedule</h3>
+          <button class="btn-sm btn-sky" onclick="loadToday()">↻ Refresh</button>
+        </div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>#</th><th>Patient</th><th>Phone</th><th>Department</th><th>Status</th><th>Action</th></tr></thead>
+            <tbody id="todayBody"><tr><td colspan="6" style="text-align:center;padding:28px;"><div class="spinner"></div></td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- PATIENTS -->
+    <div class="section" id="sec-patients">
+      <div class="card">
+        <div class="card-head">
+          <h3>🧑‍⚕️ Patient Records</h3>
+          <div class="filter-row">
+            <input class="f-input" id="patSearch" placeholder="Search by name..." oninput="filterPats()"/>
+            <select class="f-select" id="patGF" onchange="filterPats()">
+              <option value="">All Genders</option><option>Male</option><option>Female</option><option>Other</option>
+            </select>
+            <span id="patCount" style="font-size:12px;color:var(--subtext);font-weight:600;white-space:nowrap;"></span>
+          </div>
+        </div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>ID</th><th>Name</th><th>Phone</th><th>Age</th><th>Gender</th><th>Relation</th><th>Condition</th><th>Registered</th></tr></thead>
+            <tbody id="patBody"><tr><td colspan="8" style="text-align:center;padding:28px;"><div class="spinner"></div></td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- NOTES -->
+    <div class="section" id="sec-notes">
+      <div class="card">
+        <div class="card-head">
+          <h3>📝 My Clinical Notes</h3>
+          <span style="font-size:12px;color:var(--subtext);">Saved locally on this device</span>
+        </div>
+        <div style="padding:20px;">
+          <div class="notes-box">
+            <textarea id="notesArea" placeholder="Write your notes, reminders, or patient observations here..."></textarea>
+          </div>
+          <button class="notes-save" onclick="saveNotes()">💾 Save Notes</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- REJECT MODAL -->
+<div class="modal-overlay" id="rejectModal">
+  <div class="modal-box">
+    <h3>Reject Appointment</h3>
+    <p>Please provide a reason for rejection:</p>
+    <textarea id="rejectReason" placeholder="e.g. Doctor unavailable on this date..."></textarea>
+    <div class="modal-acts">
+      <button class="btn-cancel" onclick="closeReject()">Cancel</button>
+      <button class="btn-reject-confirm" onclick="confirmReject()">Reject</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const AUTH = 'http://localhost:5002';
+  const BASE = 'http://localhost:5002';
+  let allAppts=[], allPats=[], activeTab='all', rejectId=null;
+
+  window.onload = () => { setDate(); loadUser(); loadNotes(); loadDarkPref(); loadOverview(); };
+
+  function setDate() {
+    const d = new Date();
+    document.getElementById('dateChip').textContent = d.toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short'});
+    document.getElementById('todayDate').textContent = d.toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  }
+
+  function loadUser() {
+    try {
+      const u = JSON.parse(localStorage.getItem('hospital_user')||'{}');
+      if (u.name||u.email) {
+        const name = u.name||u.email.split('@')[0];
+        document.getElementById('docName').textContent = name;
+        document.getElementById('pageSub').textContent = 'Welcome back, '+name;
+        document.getElementById('greetName').textContent = 'Good day, '+name+' 👋';
+      }
+    } catch {}
+  }
+
+  // ── Dark Mode ──
+  function loadDarkPref() {
+    if (localStorage.getItem('doc_dark')==='true') {
+      document.body.classList.add('dark');
+      document.getElementById('darkBtn').textContent = '☀️';
+    }
+  }
+  function toggleDark() {
+    const dark = document.body.classList.toggle('dark');
+    document.getElementById('darkBtn').textContent = dark ? '☀️' : '🌙';
+    localStorage.setItem('doc_dark', dark);
+  }
+
+  // ── Navigation ──
+  function showSec(id) {
+    document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+    document.getElementById('sec-'+id).classList.add('active');
+    document.getElementById('nav-'+id).classList.add('active');
+    const titles={overview:'Dashboard',appointments:'Appointments',today:"Today's Schedule",patients:'Patient Records',notes:'My Notes'};
+    document.getElementById('pageTitle').textContent = titles[id]||id;
+    if(id==='appointments') loadAppts();
+    if(id==='today')        loadToday();
+    if(id==='patients')     loadPats();
+  }
+
+  // ── Overview ──
+  async function loadOverview() {
+    try {
+      const [aR,pR] = await Promise.all([fetch(BASE+'/appointments'),fetch(BASE+'/get-all-patients')]);
+      allAppts=await aR.json(); allPats=await pR.json();
+      const today=new Date().toISOString().split('T')[0];
+      const todayA=allAppts.filter(a=>a.date===today);
+      const pending=allAppts.filter(a=>a.status==='pending');
+      const acc=allAppts.filter(a=>a.status==='accepted');
+      const rej=allAppts.filter(a=>a.status==='rejected');
+      document.getElementById('sTotal').textContent=allAppts.length;
+      document.getElementById('sPend').textContent=pending.length;
+      document.getElementById('sAcc').textContent=acc.length;
+      document.getElementById('sRej').textContent=rej.length;
+      document.getElementById('sPats').textContent=allPats.length;
+      document.getElementById('tToday').textContent=todayA.length;
+      document.getElementById('tPending').textContent=pending.length;
+      document.getElementById('tDone').textContent=acc.length;
+      const body=document.getElementById('pendingBody');
+      const pend=pending.slice(0,8);
+      if(pend.length===0){body.innerHTML='<tr><td colspan="6"><div class="empty"><div class="ei">✅</div><p>No pending appointments!</p></div></td></tr>';return;}
+      body.innerHTML=pend.map(a=>`<tr>
+        <td><span style="background:var(--sky);color:var(--blue);font-size:11px;font-weight:700;padding:3px 9px;border-radius:6px;">#${String(a.id).padStart(4,'0')}</span></td>
+        <td style="font-weight:600;color:var(--text);">${a.full_name}</td>
+        <td>${a.department}</td><td>${a.doctor||'—'}</td><td>${fmtD(a.date)}</td>
+        <td><div class="acts"><button class="btn-acc" onclick="accAppt(${a.id})">✓ Accept</button><button class="btn-rej" onclick="openReject(${a.id})">✕ Reject</button></div></td>
+      </tr>`).join('');
+    } catch {
+      document.getElementById('pendingBody').innerHTML='<tr><td colspan="6" style="text-align:center;padding:24px;color:#991b1b;">⚠ Could not reach appointment server (port 5002).</td></tr>';
+    }
+  }
+
+  // ── Appointments ──
+  async function loadAppts() {
+    document.getElementById('apptBody').innerHTML='<tr><td colspan="8" style="text-align:center;padding:28px;"><div class="spinner"></div></td></tr>';
+    try {
+      allAppts=await (await fetch(BASE+'/appointments')).json();
+      updateTabCounts(); filterAppts();
+    } catch { document.getElementById('apptBody').innerHTML='<tr><td colspan="8" style="text-align:center;padding:24px;color:#991b1b;">⚠ Server not reachable (port 5002).</td></tr>'; }
+  }
+
+  function setTab(tab,el){activeTab=tab;document.querySelectorAll('.stab').forEach(s=>s.classList.remove('active-tab'));el.classList.add('active-tab');filterAppts();}
+
+  function updateTabCounts(){
+    document.getElementById('cAll').textContent=`(${allAppts.length})`;
+    document.getElementById('cPend').textContent=`(${allAppts.filter(a=>a.status==='pending').length})`;
+    document.getElementById('cAcc').textContent=`(${allAppts.filter(a=>a.status==='accepted').length})`;
+    document.getElementById('cRej').textContent=`(${allAppts.filter(a=>a.status==='rejected').length})`;
+  }
+
+  function filterAppts(){
+    const q=(document.getElementById('apptSearch')?.value||'').toLowerCase();
+    const dept=document.getElementById('apptDept')?.value||'';
+    const data=allAppts.filter(a=>(activeTab==='all'||a.status===activeTab)&&(!q||a.full_name.toLowerCase().includes(q))&&(!dept||a.department===dept));
+    const body=document.getElementById('apptBody');
+    if(data.length===0){body.innerHTML='<tr><td colspan="8"><div class="empty"><div class="ei">📭</div><p>No appointments found.</p></div></td></tr>';return;}
+    body.innerHTML=data.map(a=>{
+      const sc=a.status==='pending'?'sb-pending':a.status==='accepted'?'sb-accepted':'sb-rejected';
+      const sd=a.status==='pending'?'sdot-p':a.status==='accepted'?'sdot-a':'sdot-r';
+      return`<tr>
+        <td><span style="background:var(--sky);color:var(--blue);font-size:11px;font-weight:700;padding:3px 9px;border-radius:6px;">#${String(a.id).padStart(4,'0')}</span></td>
+        <td style="font-weight:600;color:var(--text);">${a.full_name}</td>
+        <td>${a.phone}</td><td>${a.department}</td><td>${a.doctor||'—'}</td><td>${fmtD(a.date)}</td>
+        <td><span class="sb ${sc}"><span class="sdot ${sd}"></span>${a.status}</span></td>
+        <td><div class="acts">
+          ${a.status!=='accepted'?`<button class="btn-acc" onclick="accAppt(${a.id})">✓</button>`:''}
+          ${a.status!=='rejected'?`<button class="btn-rej" onclick="openReject(${a.id})">✕</button>`:''}
+          ${a.status!=='pending'?`<button class="btn-rst" onclick="rstAppt(${a.id})" title="Reset">↺</button>`:''}
+        </div></td>
+      </tr>`;
+    }).join('');
+  }
+
+  // ── Today ──
+  async function loadToday(){
+    const body=document.getElementById('todayBody');
+    body.innerHTML='<tr><td colspan="6" style="text-align:center;padding:28px;"><div class="spinner"></div></td></tr>';
+    try{
+      const all=await(await fetch(BASE+'/appointments')).json();
+      const today=new Date().toISOString().split('T')[0];
+      const data=all.filter(a=>a.date===today);
+      if(data.length===0){body.innerHTML='<tr><td colspan="6"><div class="empty"><div class="ei">🌅</div><p>No appointments scheduled for today.</p></div></td></tr>';return;}
+      body.innerHTML=data.map((a,i)=>{
+        const sc=a.status==='pending'?'sb-pending':a.status==='accepted'?'sb-accepted':'sb-rejected';
+        const sd=a.status==='pending'?'sdot-p':a.status==='accepted'?'sdot-a':'sdot-r';
+        return`<tr>
+          <td style="color:var(--subtext);font-weight:600;">${i+1}</td>
+          <td style="font-weight:600;color:var(--text);">${a.full_name}</td>
+          <td>${a.phone}</td><td>${a.department}</td>
+          <td><span class="sb ${sc}"><span class="sdot ${sd}"></span>${a.status}</span></td>
+          <td><div class="acts">
+            ${a.status!=='accepted'?`<button class="btn-acc" onclick="accAppt(${a.id})">✓ Accept</button>`:''}
+            ${a.status!=='rejected'?`<button class="btn-rej" onclick="openReject(${a.id})">✕ Reject</button>`:''}
+          </div></td>
+        </tr>`;
+      }).join('');
+    }catch{body.innerHTML='<tr><td colspan="6" style="text-align:center;padding:24px;color:#991b1b;">⚠ Server not reachable.</td></tr>';}
+  }
+
+  // ── Patients ──
+  async function loadPats(){
+    const body=document.getElementById('patBody');
+    body.innerHTML='<tr><td colspan="8" style="text-align:center;padding:28px;"><div class="spinner"></div></td></tr>';
+    try{allPats=await(await fetch(BASE+'/get-all-patients')).json();filterPats();}
+    catch{body.innerHTML='<tr><td colspan="8" style="text-align:center;padding:24px;color:#991b1b;">⚠ Server not reachable.</td></tr>';}
+  }
+
+  function filterPats(){
+    const q=(document.getElementById('patSearch')?.value||'').toLowerCase();
+    const g=document.getElementById('patGF')?.value||'';
+    const data=allPats.filter(p=>(!q||p.name.toLowerCase().includes(q))&&(!g||p.gender===g));
+    document.getElementById('patCount').textContent=`Showing ${data.length} of ${allPats.length}`;
+    const body=document.getElementById('patBody');
+    if(data.length===0){body.innerHTML='<tr><td colspan="8"><div class="empty"><div class="ei">🧑‍⚕️</div><p>No patients found.</p></div></td></tr>';return;}
+    body.innerHTML=data.map(p=>{
+      const dt=new Date(p.created_at).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
+      const gc=p.gender==='Male'?'sb-accepted':p.gender==='Female'?'sb-pending':'sb-rejected';
+      return`<tr>
+        <td><span style="background:var(--sky);color:var(--blue);font-size:11px;font-weight:700;padding:3px 9px;border-radius:6px;">#${String(p.id).padStart(4,'0')}</span></td>
+        <td style="font-weight:600;color:var(--text);">${p.name}</td>
+        <td>${p.phone}</td><td>${p.age} yrs</td>
+        <td><span class="sb ${gc}">${p.gender}</span></td>
+        <td>${p.relation}</td>
+        <td>${p.condition?`<span style="background:#fff7ed;color:#9a3412;font-size:11px;padding:3px 8px;border-radius:6px;">${p.condition}</span>`:'—'}</td>
+        <td>${dt}</td>
+      </tr>`;
+    }).join('');
+  }
+
+  async function accAppt(id){
+    try{const r=await fetch(`${BASE}/appointment/${id}/accept`,{method:'POST'});const d=await r.json();if(d.success){toast('✅ Appointment accepted','success');await refresh();}else toast(d.message||'Error','error');}
+    catch{toast('Server not reachable','error');}
+  }
+  function openReject(id){rejectId=id;document.getElementById('rejectModal').classList.add('open');document.getElementById('rejectReason').value='';}
+  function closeReject(){document.getElementById('rejectModal').classList.remove('open');rejectId=null;}
+  async function confirmReject(){
+    const reason=document.getElementById('rejectReason').value.trim()||'Rejected by doctor';
+    try{const r=await fetch(`${BASE}/appointment/${rejectId}/reject`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({reason})});const d=await r.json();if(d.success){toast('❌ Rejected','error');closeReject();await refresh();}else toast(d.message||'Error','error');}
+    catch{toast('Server not reachable','error');}
+  }
+  async function rstAppt(id){
+    try{const r=await fetch(`${BASE}/appointment/${id}/reset`,{method:'POST'});const d=await r.json();if(d.success){toast('↺ Reset to pending','success');await refresh();}else toast(d.message||'Error','error');}
+    catch{toast('Server not reachable','error');}
+  }
+
+  async function refresh(){
+    const a=document.querySelector('.section.active')?.id;
+    if(a==='sec-overview')loadOverview();
+    if(a==='sec-appointments')loadAppts();
+    if(a==='sec-today')loadToday();
+  }
+
+  function loadNotes(){document.getElementById('notesArea').value=localStorage.getItem('doc_notes')||'';}
+  function saveNotes(){localStorage.setItem('doc_notes',document.getElementById('notesArea').value);toast('📝 Notes saved!','success');}
+
+  function toast(msg,type='success'){const t=document.getElementById('toast');t.textContent=msg;t.className=`toast t-${type} show`;setTimeout(()=>t.classList.remove('show'),2800);}
+  function fmtD(d){return d?new Date(d).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}):'—';}
+  function doLogout(){['hospital_user','tl_loggedIn','tl_currentUser'].forEach(k=>localStorage.removeItem(k));window.location.href='login1.html';}
+
+  document.getElementById('rejectModal').addEventListener('click',function(e){if(e.target===this)closeReject();});
+</script>
+</body>
+</html>

@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Official video gallery of Ek Noor Neki da Charitable Hospital.">
+  <title>Video Gallery | Ek Noor Neki Da Hospital</title>
+  <link rel="icon" href="logo.jpg" type="image">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
+  <style>
+    :root {
+      --navy:   #0d1f5c;
+      --blue:   #1a3bb5;
+      --accent: #4f8ef7;
+      --sky:    #e8f0fe;
+      --bg:     #f4f7ff;
+      --white:  #ffffff;
+      --text-muted: #6b7a99;
+      --shadow: 0 8px 32px rgba(13,31,92,0.18);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: "DM Sans", sans-serif; background: var(--bg); color: #1a2340; }
+
+    /* NAVBAR */
+    @keyframes navAnim {
+      from { background-color: rgba(60,91,170,0.97); }
+      to   { background-color: rgba(15,40,165,0.97); }
+    }
+    .navbar-custom {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 28px;
+      animation: navAnim 5s infinite alternate;
+      position: sticky; top: 0; z-index: 1000;
+      backdrop-filter: blur(10px);
+    }
+    .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .nav-logo img { width: 44px; height: 44px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.3); }
+    .nav-logo span { color: white; font-size: 17px; font-weight: 600; font-family: "Playfair Display", serif; }
+    .menu { list-style: none; display: flex; gap: 4px; margin: 0; }
+    .menu li a {
+      text-decoration: none; color: rgba(255,255,255,0.85);
+      font-size: 14px; font-weight: 400; padding: 8px 14px;
+      border-radius: 8px; transition: 0.2s;
+    }
+    .menu li a:hover, .menu li a.active {
+      background: rgba(255,255,255,0.15); color: white;
+    }
+    .menu li a.active { font-weight: 600; }
+    .menu-toggle { display: none; font-size: 24px; color: white; background: none; border: none; cursor: pointer; }
+
+    /* HERO */
+    .hero {
+      height: 360px;
+      background: linear-gradient(135deg, var(--navy) 0%, var(--blue) 60%, var(--accent) 100%);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; color: white;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: "";
+      position: absolute; width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(79,142,247,0.2) 0%, transparent 70%);
+      top: -150px; right: -100px; border-radius: 50%;
+    }
+    .hero::after {
+      content: "";
+      position: absolute; width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%);
+      bottom: -80px; left: -50px; border-radius: 50%;
+    }
+    .hero-inner { position: relative; z-index: 2; padding: 0 20px; }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      color: #c8d6ff; padding: 5px 18px; border-radius: 50px;
+      font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+      font-weight: 600; margin-bottom: 14px;
+    }
+    .hero h1 {
+      font-family: "Playfair Display", serif;
+      font-size: 54px; font-weight: 700; line-height: 1.1; margin-bottom: 14px;
+    }
+    .breadcrumb-custom {
+      display: flex; align-items: center; gap: 8px;
+      justify-content: center; color: rgba(255,255,255,0.7);
+      font-size: 14px; margin-bottom: 20px;
+    }
+    .breadcrumb-custom a { color: #c8d6ff; text-decoration: none; transition: color 0.2s; }
+    .breadcrumb-custom a:hover { color: white; }
+    .hero-back-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.15);
+      border: 1.5px solid rgba(255,255,255,0.35);
+      color: white; font-size: 14px; font-weight: 500;
+      padding: 10px 24px; border-radius: 50px; cursor: pointer;
+      text-decoration: none; font-family: "DM Sans", sans-serif;
+      transition: all 0.25s ease; backdrop-filter: blur(6px);
+    }
+    .hero-back-btn:hover {
+      background: rgba(255,255,255,0.28); color: white;
+      transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    }
+    .hero-back-btn svg { width: 16px; height: 16px; fill: white; flex-shrink: 0; }
+
+    /* SECTION HEADINGS */
+    .sec-label {
+      text-align: center; font-size: 11px;
+      letter-spacing: 3px; text-transform: uppercase;
+      color: var(--accent); font-weight: 600; margin-bottom: 8px;
+    }
+    .sec-title {
+      text-align: center;
+      font-family: "Playfair Display", serif;
+      font-size: 34px; color: var(--navy);
+      margin-bottom: 10px; font-weight: 700;
+    }
+    .sec-sub {
+      text-align: center; color: var(--text-muted);
+      font-size: 15px; margin-bottom: 48px;
+    }
+    .divider {
+      width: 52px; height: 4px;
+      background: linear-gradient(to right, var(--navy), var(--accent));
+      border-radius: 2px; margin: 10px auto 48px;
+    }
+
+    /* VIDEO CARDS */
+    .video-section { padding: 72px 0 40px; }
+
+    .video-card {
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(13,31,92,0.1);
+      border: 1px solid rgba(13,31,92,0.06);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      height: 100%;
+    }
+    .video-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 48px rgba(13,31,92,0.18);
+    }
+    .video-card .vid-frame {
+      border-radius: 0;
+      overflow: hidden;
+    }
+    .video-card .card-body {
+      padding: 20px 20px 24px;
+    }
+    .video-card .card-tag {
+      display: inline-block;
+      font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+      font-weight: 600; color: var(--accent);
+      background: var(--sky); padding: 3px 10px; border-radius: 20px;
+      margin-bottom: 10px;
+    }
+    .video-card h3 {
+      font-family: "Playfair Display", serif;
+      font-size: 17px; color: var(--navy);
+      font-weight: 700; line-height: 1.4;
+      margin: 0;
+    }
+
+    /* SHORTS SECTION */
+    .shorts-section { padding: 40px 0 72px; background: white; }
+    .short-card {
+      background: var(--bg);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(13,31,92,0.08);
+      border: 1px solid rgba(13,31,92,0.06);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      max-width: 320px; margin: auto;
+    }
+    .short-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 48px rgba(13,31,92,0.15);
+    }
+    .short-card .card-body { padding: 18px 18px 22px; }
+    .short-card h3 {
+      font-family: "Playfair Display", serif;
+      font-size: 16px; color: var(--navy); font-weight: 700;
+      margin: 0;
+    }
+
+    /* STATS BANNER */
+    .stats-banner {
+      background: linear-gradient(135deg, var(--navy), var(--blue));
+      padding: 56px 28px;
+    }
+    .stat-item { text-align: center; color: white; }
+    .stat-number {
+      font-family: "Playfair Display", serif;
+      font-size: 42px; font-weight: 700;
+      color: white; line-height: 1;
+      margin-bottom: 8px;
+    }
+    .stat-label { font-size: 13px; color: rgba(255,255,255,0.65); letter-spacing: 1px; text-transform: uppercase; }
+
+    /* CTA SECTION */
+    .cta-section {
+      background: var(--bg); padding: 72px 28px;
+      text-align: center;
+    }
+    .cta-box {
+      max-width: 640px; margin: auto;
+      background: white; border-radius: 24px;
+      padding: 52px 44px;
+      box-shadow: var(--shadow);
+      border: 1.5px solid rgba(13,31,92,0.07);
+    }
+    .cta-icon { font-size: 48px; margin-bottom: 20px; }
+    .cta-box h2 {
+      font-family: "Playfair Display", serif;
+      font-size: 30px; color: var(--navy);
+      margin-bottom: 12px; font-weight: 700;
+    }
+    .cta-box p { color: var(--text-muted); font-size: 15px; margin-bottom: 28px; line-height: 1.7; }
+    .cta-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: linear-gradient(135deg, var(--navy), var(--blue));
+      color: white; text-decoration: none;
+      padding: 14px 32px; border-radius: 50px;
+      font-size: 15px; font-weight: 600;
+      font-family: "DM Sans", sans-serif;
+      transition: all 0.25s ease;
+      box-shadow: 0 6px 20px rgba(26,59,181,0.35);
+    }
+    .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(26,59,181,0.45); color: white; }
+
+    /* FOOTER */
+    .hospital-footer {
+      background: #07122a; color: #cdd5e8;
+      padding: 56px 28px 24px; font-size: 14.5px;
+    }
+    .footer-container {
+      max-width: 1100px; margin: auto;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 36px;
+    }
+    .footer-box h3, .footer-box h4 {
+      color: #fff; margin-bottom: 14px; font-weight: 600;
+      font-family: "Playfair Display", serif;
+    }
+    .footer-box p { line-height: 1.8; color: #9aa4be; }
+    .footer-box ul { list-style: none; padding: 0; }
+    .footer-box ul li { margin-bottom: 10px; color: #9aa4be; }
+    .footer-box a { color: #7eb8f7; text-decoration: none; transition: color 0.2s; }
+    .footer-box a:hover { color: white; }
+    .footer-bottom {
+      max-width: 1100px; margin: 28px auto 0;
+      padding-top: 18px; border-top: 1px solid rgba(255,255,255,0.1);
+      text-align: center; font-size: 13px; color: #6b7a99;
+    }
+
+    /* SCROLL TOP */
+    #scrollTop {
+      position: fixed; bottom: 28px; right: 100px;
+      width: 44px; height: 44px;
+      background: linear-gradient(135deg, var(--navy), var(--accent));
+      color: white; border: none; border-radius: 50%;
+      font-size: 16px; cursor: pointer;
+      display: none; align-items: center; justify-content: center;
+      box-shadow: 0 6px 20px rgba(13,31,92,0.4);
+      transition: transform 0.3s; z-index: 1000;
+    }
+    #scrollTop.show { display: flex; }
+    #scrollTop:hover { transform: scale(1.1); }
+
+    /* AI BUTTON */
+    #ai-float-btn {
+      position: fixed; bottom: 30px; right: 30px;
+      z-index: 999999; display: flex; flex-direction: column;
+      align-items: center; gap: 8px; cursor: pointer;
+    }
+    #ai-float-bubble {
+      background: #1a3bb5; color: white;
+      font-size: 12px; font-weight: 500;
+      padding: 6px 14px; border-radius: 20px;
+      white-space: nowrap; box-shadow: 0 4px 15px rgba(26,59,181,0.4);
+      animation: aiBubbleFloat 2s ease-in-out infinite;
+    }
+    @keyframes aiBubbleFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-5px)} }
+    #ai-float-circle {
+      width: 65px; height: 65px; border-radius: 50%;
+      background: linear-gradient(135deg, #1a3bb5, #4f8ef7);
+      display: flex; align-items: center; justify-content: center;
+      border: 3px solid white; animation: aiPulseRing 2s infinite; transition: transform 0.2s;
+    }
+    #ai-float-circle:hover { transform: scale(1.1); }
+    @keyframes aiPulseRing {
+      0%   { box-shadow: 0 0 0 0 rgba(26,59,181,0.6), 0 6px 25px rgba(26,59,181,0.4); }
+      70%  { box-shadow: 0 0 0 14px rgba(26,59,181,0), 0 6px 25px rgba(26,59,181,0.4); }
+      100% { box-shadow: 0 0 0 0 rgba(26,59,181,0), 0 6px 25px rgba(26,59,181,0.4); }
+    }
+    #ai-float-circle svg { width: 32px; height: 32px; fill: white; }
+    #ai-modal-overlay {
+      display: none; position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.6); z-index: 9999999;
+      align-items: center; justify-content: center; padding: 20px;
+    }
+    #ai-modal-overlay.ai-active { display: flex; }
+    #ai-modal-box {
+      width: 100%; max-width: 780px;
+      height: min(700px, calc(100vh - 40px));
+      background: white; border-radius: 28px; overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4); position: relative;
+    }
+    #ai-close-btn {
+      position: absolute; top: 14px; right: 16px; z-index: 10;
+      background: rgba(255,255,255,0.2); border: none; color: white;
+      width: 34px; height: 34px; border-radius: 50%;
+      font-size: 18px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+    }
+    #ai-close-btn:hover { background: rgba(255,255,255,0.35); }
+    #ai-modal-box iframe { width: 100%; height: 100%; border: none; display: block; }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 36px; }
+      .menu { display: none; flex-direction: column; position: absolute; top: 72px; right: 0; background: #0f28a5; width: 200px; padding: 16px; border-radius: 0 0 12px 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.25); }
+      .menu.active { display: flex; }
+      .menu-toggle { display: block; }
+      .stat-number { font-size: 32px; }
+      .cta-box { padding: 36px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar-custom">
+  <a class="nav-logo" href="home.html">
+    <img src="logo.jpg" alt="Hospital Logo">
+    <span>EK NOOR NEKI DA HOSPITAL</span>
+  </a>
+  <button class="menu-toggle" onclick="toggleMenu()">&#9776;</button>
+  <ul class="menu" id="mainMenu">
+    <li><a href="home (1).html">Home</a></li>
+    <li><a href="#">Doctor</a></li>
+    <li><a href="patient.html">Patient</a></li>
+    <li><a href="#">Services</a></li>
+    <li><a href="contact (5).html">Contact</a></li>
+     <li><a href="about.html">About</a></li>
+    <li><a href="videos.html" class="active">Videos</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-inner" data-aos="fade-up">
+    <div class="hero-badge"><i class="fas fa-video"></i>&nbsp; Media Gallery</div>
+    <h1>Hospital Gallery</h1>
+    <div class="breadcrumb-custom">
+      <a href="home.html">Home</a>
+      <i class="fas fa-chevron-right" style="font-size:9px; opacity:0.6;"></i>
+      <span style="color:white;">Video Insights</span>
+    </div>
+    <a href="home (1).html" class="hero-back-btn">
+      <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+      Back to Home
+    </a>
+  </div>
+</header>
+
+<!-- AWARENESS VIDEOS -->
+<section class="video-section">
+  <div class="container" style="max-width:1100px;">
+    <div class="sec-label" data-aos="fade-up">Watch &amp; Learn</div>
+    <h2 class="sec-title" data-aos="fade-up">Latest Awareness Videos</h2>
+    <p class="sec-sub" data-aos="fade-up">Expert health insights and patient stories from our hospital</p>
+    <div class="divider" data-aos="fade-up"></div>
+
+    <div class="row g-4">
+
+      <div class="col-lg-4 col-md-6" data-aos="fade-up">
+        <div class="video-card">
+          <div class="ratio ratio-16x9 vid-frame">
+            <iframe src="https://www.youtube.com/embed/-cuSA7unByY?si=VHXZF3Xs-s_fRLwd" title="Expert Views" loading="lazy" allowfullscreen></iframe>
+          </div>
+          <div class="card-body">
+            <span class="card-tag">Health Tips</span>
+            <h3>Tips for Viral Fever | Expert Views</h3>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+        <div class="video-card">
+          <div class="ratio ratio-16x9 vid-frame">
+            <iframe src="https://www.youtube.com/embed/NFIEAsGveFw?si=9kLlQRb0CZcCuhE7" title="Hospital Tour" loading="lazy" allowfullscreen></iframe>
+          </div>
+          <div class="card-body">
+            <span class="card-tag">Patient Story</span>
+            <h3>Satisfied Patient Review | Dialysis Patient</h3>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+        <div class="video-card">
+          <div class="ratio ratio-16x9 vid-frame">
+            <iframe src="https://www.youtube.com/embed/7jvpvd7-ULw?si=XzH9M1p1ggcmCjHp" title="Expert Views" loading="lazy" allowfullscreen></iframe>
+          </div>
+          <div class="card-body">
+            <span class="card-tag">Hospital Service</span>
+            <h3>Medicines at Cost Price</h3>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+        <div class="video-card">
+          <div class="ratio ratio-16x9 vid-frame">
+            <iframe src="https://www.youtube.com/embed/ZF5-3KJNvpo?si=cYV7FSy-qXCyNKhW" title="Expert Views" loading="lazy" allowfullscreen></iframe>
+          </div>
+          <div class="card-body">
+            <span class="card-tag">Seva</span>
+            <h3>ਲੰਗਰਿ ਦਉਲਤਿ ਵੰਡੀਐ ਰਸੁ ਅੰਮ੍ਰਿਤੁ ਖੀਰਿ ਘਿਆਲੀ</h3>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+        <div class="video-card">
+          <div class="ratio ratio-16x9 vid-frame">
+            <iframe src="https://www.youtube.com/embed/paGWE4nSRo4?si=SKY6CV7EuT8JOyvs" title="Hospital Tour" loading="lazy" allowfullscreen></iframe>
+          </div>
+          <div class="card-body">
+            <span class="card-tag">Naturopathy</span>
+            <h3>ਨੈਚਰੋਪੈਥੀ ਨਾਲ ਕਿਡਨੀ ਫੇਲ੍ਹ ਅਤੇ ਟ੍ਰਾਂਸਪਲਾਂਟ ਦਾ ਲੱਖਾਂ ਦਾ ਖਰਚਾ ਬਚਾਉ ਜੀ</h3>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+        <div class="video-card">
+          <div class="ratio ratio-16x9 vid-frame">
+            <iframe src="https://www.youtube.com/embed/9rLF3NOe-Hw?si=ZsFcJzXisqiYZUME" title="First Aid" loading="lazy" allowfullscreen></iframe>
+          </div>
+          <div class="card-body">
+            <span class="card-tag">First Aid</span>
+            <h3>First Aid Tip — Must Watch</h3>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- STATS BANNER -->
+<section class="stats-banner">
+  <div class="container" style="max-width:900px;">
+    <div class="row g-4 text-center">
+      <div class="col-6 col-md-3" data-aos="fade-up">
+        <div class="stat-item">
+          <div class="stat-number">50+</div>
+          <div class="stat-label">Videos Published</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3" data-aos="fade-up" data-aos-delay="100">
+        <div class="stat-item">
+          <div class="stat-number">10K+</div>
+          <div class="stat-label">Views</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3" data-aos="fade-up" data-aos-delay="200">
+        <div class="stat-item">
+          <div class="stat-number">14+</div>
+          <div class="stat-label">Expert Doctors</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3" data-aos="fade-up" data-aos-delay="300">
+        <div class="stat-item">
+          <div class="stat-number">24/7</div>
+          <div class="stat-label">Always Available</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SHORTS SECTION -->
+<section class="shorts-section">
+  <div class="container" style="max-width:1100px;">
+    <div class="sec-label" data-aos="fade-up" style="padding-top:60px;">Quick Videos</div>
+    <h2 class="sec-title" data-aos="fade-up">Health Shorts</h2>
+    <p class="sec-sub" data-aos="fade-up">Quick health tips in under 60 seconds</p>
+    <div class="divider" data-aos="fade-up"></div>
+
+    <div class="row g-4 justify-content-center">
+      <div class="col-lg-3 col-md-5 col-sm-8" data-aos="fade-up">
+        <div class="short-card">
+          <div class="ratio vid-frame" style="--bs-aspect-ratio: 177%;">
+            <iframe src="https://www.youtube.com/embed/9rLF3NOe-Hw?si=ZsFcJzXisqiYZUME" title="Short 1" loading="lazy" allowfullscreen></iframe>
+          </div>
+          <div class="card-body">
+            <span class="card-tag" style="background:var(--sky); color:var(--accent);">Short</span>
+            <h3 style="margin-top:8px;">First Aid Tip #1</h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-5 col-sm-8" data-aos="fade-up" data-aos-delay="150">
+        <div class="short-card">
+          <div class="ratio vid-frame" style="--bs-aspect-ratio: 177%;">
+            <iframe src="https://www.youtube.com/embed/NFIEAsGveFw?si=9kLlQRb0CZcCuhE7" title="Short 2" loading="lazy" allowfullscreen></iframe>
+          </div>
+          <div class="card-body">
+            <span class="card-tag" style="background:var(--sky); color:var(--accent);">Short</span>
+            <h3 style="margin-top:8px;">Heart Health Awareness</h3>
+          </div>
+        </div>
+      </div>
+       <div class="col-lg-3 col-md-5 col-sm-8" data-aos="fade-up" data-aos-delay="150">
+        <div class="short-card">
+          <div class="ratio vid-frame" style="--bs-aspect-ratio: 177%;">
+            <iframe src="https://www.youtube.com/embed/7trYp7VIkYE" title="Short 3" loading="lazy" allowfullscreen></iframe>
+          </div>
+          <div class="card-body">
+            <span class="card-tag" style="background:var(--sky); color:var(--accent);">Short</span>
+            <h3 style="margin-top:8px;">Provide free medicines</h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-5 col-sm-8" data-aos="fade-up" data-aos-delay="150">
+        <div class="short-card">
+          <div class="ratio vid-frame" style="--bs-aspect-ratio: 177%;">
+            <iframe src="https://www.youtube.com/embed/9QH9aNp3w_c" title="Short 4" loading="lazy" allowfullscreen></iframe>
+          </div>
+          <div class="card-body">
+            <span class="card-tag" style="background:var(--sky); color:var(--accent);">Short</span>
+            <h3 style="margin-top:8px;">About Our Hospital</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-box" data-aos="fade-up">
+    <div class="cta-icon">🏥</div>
+    <h2>Need Medical Assistance?</h2>
+    <p>Our doctors are available 24/7. Book an appointment or call us directly for immediate help.</p>
+    <div style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap;">
+      <a href="home (1).html" class="cta-btn">
+        <i class="fas fa-home"></i> Back to Home
+      </a>
+      <a href="https://wa.me/919876413100" class="cta-btn" style="background: linear-gradient(135deg, #0f6e56, #1D9E75);">
+        <i class="fab fa-whatsapp"></i> WhatsApp Us
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="hospital-footer" data-aos="fade-up">
+  <div class="footer-container">
+    <div class="footer-box">
+      <h3>Ek Noor Neki da Charitable Hospital</h3>
+      <p>A beacon of hope providing affordable medical care with dignity. Follow our journey on social media for more updates.</p>
+    </div>
+    <div class="footer-box">
+      <h4>Contact Information</h4>
+      <ul>
+        <li><a href="https://www.google.com/maps/place/Ek+Noor+Neki+da+Hospital/@30.8145395,75.8647397,17z" target="_blank">📍 Gurudwara Alamgir Sahib, Ludhiana</a></li>
+        <li><a href="https://wa.me/919876413100">📞 098764 13100</a></li>
+        <li><a href="mailto:eknoorsewakendra@yahoo.com">✉️ eknoorsewakendra@yahoo.com</a></li>
+      </ul>
+    </div>
+    <div class="footer-box">
+      <h4>Quick Navigation</h4>
+      <ul>
+        <li><a href="home.html">Home</a></li>
+        <li><a href="#">Our Doctors</a></li>
+        <li><a href="patient.html"> Patient Portal</a></li>
+        <li><a href="contact.html"> Contact Us</a></li>
+        <li><a href="#"> About Us</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    &copy; 2026 Ek Noor Neki da Charitable Hospital. Dedicated to Humanity.
+  </div>
+</footer>
+
+<!-- SCROLL TOP -->
+<button id="scrollTop" title="Back to top"><i class="fas fa-chevron-up"></i></button>
+
+<!-- AI FLOAT BUTTON -->
+<div id="ai-float-btn" onclick="openAIChatModal()">
+  <div id="ai-float-bubble">Happy to Assist! 🤖</div>
+  <div id="ai-float-circle">
+    <svg viewBox="0 0 24 24">
+      <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/>
+    </svg>
+  </div>
+</div>
+
+<!-- AI MODAL -->
+<div id="ai-modal-overlay" onclick="closeAIChatModal(event)">
+  <div id="ai-modal-box">
+    <button id="ai-close-btn" onclick="forceCloseAIChat()">&#10005;</button>
+    <iframe src="assistant.html" id="ai-iframe"></iframe>
+  </div>
+</div>
+
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  AOS.init({ duration: 900, once: true, offset: 80 });
+
+  // Mobile menu
+  function toggleMenu() {
+    document.getElementById("mainMenu").classList.toggle("active");
+  }
+  document.addEventListener("click", function(e) {
+    if (!e.target.closest(".navbar-custom")) {
+      document.getElementById("mainMenu").classList.remove("active");
+    }
+  });
+
+  // Scroll top
+  window.addEventListener("scroll", function() {
+    const btn = document.getElementById("scrollTop");
+    if (window.scrollY > 300) btn.classList.add("show");
+    else btn.classList.remove("show");
+  });
+  document.getElementById("scrollTop").addEventListener("click", function() {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+
+  // AI Chat
+  function openAIChatModal() {
+    document.getElementById("ai-modal-overlay").classList.add("ai-active");
+    document.body.style.overflow = "hidden";
+  }
+  function closeAIChatModal(e) {
+    if (e.target === document.getElementById("ai-modal-overlay")) forceCloseAIChat();
+  }
+  function forceCloseAIChat() {
+    document.getElementById("ai-modal-overlay").classList.remove("ai-active");
+    document.body.style.overflow = "";
+  }
+</script>
+</body>
+</html>

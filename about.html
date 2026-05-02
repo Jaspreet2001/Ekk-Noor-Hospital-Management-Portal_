@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="logo.jpg" type="image">
+    <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap"
+        rel="stylesheet" />
+    <title>About Us – Ek Noor Neki Da Hospital Alamgir</title>
+
+    <style>
+        :root {
+            --navy: #0d1f5c;
+            --blue: #1a3bb5;
+            --accent: #4f8ef7;
+            --sky: #e8f0fe;
+            --white: #ffffff;
+            --shadow: 0 8px 32px rgba(13, 31, 92, 0.18);
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: #f4f7ff;
+            overflow-x: hidden;
+        }
+
+        /* ── NAVBAR (Reused) ── */
+        @keyframes navAnim {
+            from {
+                background-color: rgba(60, 91, 170, 0.97);
+            }
+
+            to {
+                background-color: rgba(15, 40, 165, 0.97);
+            }
+        }
+
+        .navbar-custom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 28px;
+            animation: navAnim 5s infinite alternate;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .title {
+            color: white;
+            font-size: 20px;
+            font-weight: 600;
+            margin-left: 12px;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .menu {
+            list-style: none;
+            display: flex;
+            gap: 4px;
+            margin: 0;
+        }
+
+        .menu li a {
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 14px;
+            padding: 8px 14px;
+            border-radius: 8px;
+            transition: 0.2s;
+        }
+
+        .menu li a:hover,
+        .menu li a.active {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+        }
+
+        /* ── ABOUT HERO ── */
+        .about-hero {
+            background: linear-gradient(rgba(13, 31, 92, 0.8), rgba(13, 31, 92, 0.8)), url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=2000');
+            background-size: cover;
+            background-position: center;
+            padding: 120px 24px;
+            text-align: center;
+            color: white;
+        }
+
+        .about-hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 56px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        /* ── CONTENT SECTIONS ── */
+        .vision-section {
+            padding: 80px 0;
+            background: white;
+        }
+
+        .vision-card {
+            padding: 40px;
+            border-radius: 24px;
+            background: var(--sky);
+            height: 100%;
+            transition: transform 0.3s ease;
+        }
+
+        .vision-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .section-label {
+            text-align: center;
+            font-size: 12px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+            font-size: 38px;
+            color: var(--navy);
+            margin-bottom: 40px;
+            font-weight: 700;
+        }
+
+        /* ── HISTORY TIMELINE ── */
+        .history-box {
+            border-left: 3px solid var(--accent);
+            padding-left: 30px;
+            margin-left: 20px;
+            position: relative;
+        }
+
+        .history-item {
+            position: relative;
+            margin-bottom: 40px;
+        }
+
+        .history-item::before {
+            content: '';
+            position: absolute;
+            left: -39px;
+            top: 5px;
+            width: 15px;
+            height: 15px;
+            background: var(--blue);
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 0 0 3px var(--accent);
+        }
+
+        /* ── TEAM SECTION ── */
+        .team-member {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            text-align: center;
+            padding-bottom: 25px;
+        }
+
+        .team-img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            margin-bottom: 20px;
+        }
+
+        /* ── FOOTER (Reused) ── */
+        .hospital-footer {
+            background: #07122a;
+            color: #cdd5e8;
+            padding: 56px 28px 24px;
+        }
+
+        .footer-container {
+            max-width: 1100px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 36px;
+        }
+
+        .footer-box h3 {
+            color: #fff;
+            font-family: 'Playfair Display', serif;
+            margin-bottom: 15px;
+        }
+
+        .footer-box a {
+            color: #7eb8f7;
+            text-decoration: none;
+        }
+
+        @media (max-width: 768px) {
+            .about-hero h1 {
+                font-size: 38px;
+            }
+
+            .menu {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ── NAVBAR ── -->
+    <nav class="navbar-custom">
+        <div class="left">
+            <img src="logo.jpg" class="logo" alt="Logo">
+            <span class="title">Ek Noor Neki Da</span>
+        </div>
+        <ul class="menu">
+            <li><a href="home (1).html">Home</a></li>
+            <li><a href="about.html" class="active">About</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="contact (5).html">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- ── HERO ── -->
+    <section class="about-hero">
+        <div class="container">
+            <p class="animate__animated animate__fadeInDown" style="letter-spacing: 4px; font-weight: 500;">ESTABLISHED
+                IN SERVICE</p>
+            <h1 class="animate__animated animate__zoomIn">Our Story in Alamgir</h1>
+            <p class="animate__animated animate__fadeInUp" style="max-width: 700px; margin: 0 auto; opacity: 0.9;">
+                Rooted in the spirit of 'Neki' (goodness), Ek Noor Hospital Alamgir stands as a beacon of hope,
+                delivering professional medical care to those who need it most.
+            </p>
+        </div>
+    </section>
+
+    <!-- ── MISSION & VISION ── -->
+    <section class="vision-section">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-md-6" data-aos="fade-right">
+                    <div class="vision-card">
+                        <span style="font-size: 40px;">🎯</span>
+                        <h3 class="mt-3" style="color: var(--navy); font-family: 'Playfair Display';">Our Mission</h3>
+                        <p style="color: #5a6a8a; line-height: 1.8;">To provide accessible, affordable, and high-quality
+                            healthcare services to the community of Alamgir and surrounding areas, ensuring no one is
+                            left behind due to financial hardship.</p>
+                    </div>
+                </div>
+                <div class="col-md-6" data-aos="fade-left">
+                    <div class="vision-card" style="background: var(--navy); color: white;">
+                        <span style="font-size: 40px;">✨</span>
+                        <h3 class="mt-3" style="font-family: 'Playfair Display';">Our Vision</h3>
+                        <p style="opacity: 0.8; line-height: 1.8;">To become a center of excellence in charitable
+                            healthcare, where technology meets compassion, creating a healthier future for every family
+                            in our region.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── HISTORY ── -->
+    <section class="py-5">
+        <div class="container">
+            <p class="section-label" data-aos="fade-up">Our Journey</p>
+            <h2 class="section-title" data-aos="fade-up">A Legacy of Care</h2>
+            <div class="row align-items-center">
+                <div class="col-lg-6" data-aos="fade-up">
+                    <div class="history-box">
+                        <div class="history-item">
+                            <h5 style="color: var(--blue);">The Foundation</h5>
+                            <p>Started as a small clinic in Alamgir with a vision to serve the underprivileged, driven
+                                by local volunteers and dedicated doctors.</p>
+                        </div>
+                        <div class="history-item">
+                            <h5 style="color: var(--blue);">Growth & Expansion</h5>
+                            <p>Recognizing the growing needs, we expanded into a multi-specialty hospital with advanced
+                                surgical units and diagnostic labs.</p>
+                        </div>
+                        <div class="history-item">
+                            <h5 style="color: var(--blue);">Modern Era</h5>
+                            <p>Today, we integrate digital health records and modern equipment while keeping our
+                                charitable heart at the center of everything.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6" data-aos="zoom-in">
+                    <img src="https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&q=80&w=1000"
+                        alt="Hospital" class="img-fluid rounded-4 shadow">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── STATS (Reused) ── -->
+    <section class="py-5" style="background: var(--navy); color: white;">
+        <div class="container">
+            <div class="row text-center">
+                <div class="col-md-4" data-aos="counter">
+                    <h2 style="font-size: 48px; font-family: 'Playfair Display';">100%</h2>
+                    <p style="opacity: 0.7;">Charitable Commitment</p>
+                </div>
+                <div class="col-md-4">
+                    <h2 style="font-size: 48px; font-family: 'Playfair Display';">50+</h2>
+                    <p style="opacity: 0.7;">Medical Staff</p>
+                </div>
+                <div class="col-md-4">
+                    <h2 style="font-size: 48px; font-family: 'Playfair Display';">24/7</h2>
+                    <p style="opacity: 0.7;">Patient Support</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── FOOTER ── -->
+    <footer class="hospital-footer">
+        <div class="footer-container">
+            <div class="footer-box">
+                <h3>Ek Noor Neki Da</h3>
+                <p>Located in Alamgir, we are dedicated to providing the highest standard of medical care with a focus
+                    on empathy and ethics.</p>
+            </div>
+            <div class="footer-box">
+                <h4>Explore</h4>
+                <ul class="list-unstyled">
+                    <li><a href="services.html">Medical Services</a></li>
+                    <li><a href="patient.html">Patient Guidelines</a></li>
+                    <li><a href="contact (5).html">Donate to Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-box">
+                <h4>Location</h4>
+                <p>📍 Alamgir, Near Historical Gurudwara,<br>Punjab, India</p>
+                <p>📞 +91 12345 67890</p>
+            </div>
+        </div>
+        <div class="text-center mt-5"
+            style="font-size: 13px; opacity: 0.5; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;">
+            &copy; 2026 Ek Noor Neki Da Hospital Alamgir. All Rights Reserved.
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 1000, once: true });
+    </script>
+</body>
+
+</html>
